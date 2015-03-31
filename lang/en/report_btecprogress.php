@@ -22,3 +22,6 @@
  * @copyright  Marcus Green 2015
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+$string['pluginname'] = 'BTEC progress';
+$string['title'] = 'BTEC progress report';
+

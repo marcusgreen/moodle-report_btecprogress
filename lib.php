@@ -62,10 +62,35 @@ class report_btecprogress {
     public function init() {
         $this->title = get_string('title', 'report_btecprogress');
     }
+ 
+    
+public function get_students($courseid) {
+    global $DB;
+    return $DB->get_records_sql('SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
+        FROM {user} AS stu
+        JOIN {user_enrolments} ue ON ue.userid = stu.id
+        JOIN {enrol} enr ON ue.enrolid = enr.id
+        WHERE enr.courseid = ?
+        ORDER BY lastname ASC, firstname ASC, userid ASC', array($courseid));
+}
+
+public function get_course_assignments($courseid){
+    
+}
+    
  public function get_user_assignments(){
      global $DB;
      $sql="select gbc.id,gbc.sortorder, u.username, c.shortname as course ,a.name as assignment_name,  gbf.remark
-as overalgrade
+as overallfeedback, 
+case gg.rawgrade 
+when 1 then  'R'
+when 2 then  'P'
+when 3 then  'M'
+when 4 then  'D'
+end
+as overallgrade
+
+
 from  gradingform_btec_fillings gbf 
 join gradingform_btec_criteria gbc on gbc.id=gbf.criterionid
 join assign as a on a.id=gbf.instanceid

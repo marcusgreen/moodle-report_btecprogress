@@ -24,4 +24,6 @@
  */
 $string['pluginname'] = 'BTEC progress';
 $string['title'] = 'BTEC progress report';
+$string['progresstblheader']='progresstbleheader';
+
 

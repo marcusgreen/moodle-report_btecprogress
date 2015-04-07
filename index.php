@@ -36,35 +36,24 @@ $PAGE->set_title('btecprogress', 'report_btecprogress');
 echo $OUTPUT->header();
 $report = new report_btecprogress();
 $report->init();
+$courseid = required_param('id', PARAM_INT);
 
+$users=$report->get_students($courseid);
+$assignments =$report->get_user_assignments($courseid);
 
-$assignments=$report->get_user_assignments();
-//$grades=$report->get_grades();
+var_dump($assignments);
 
-
-foreach($assignments as $assignment){
-    print $assignment->username." ";
-    print $assignment->assignment_name;
-        print "</br>";
+print "<table border=1><thead><tr><th>User Name</th>";
+foreach ($assignments as $assign){
+    print "<th>".$assign->assignment_name ."</th>";
+    
 }
-/*
-print "<table>";
-foreach($records as $record){
-    print "<tr><td>";
-    print $record->username;
-    print "</td><td>";
-    print $record->assignment_name;
-    print "</td><td>";
-    print $record->overalgrade;
-    print "</td></tr>";
-}
-print "</table>";
-echo $OUTPUT->footer();
+print "<th>Total</th></tr><thead></table>";
 
-function get_course_grade(array $records){
-    foreach($records as $record){
-    }
+foreach($users as $user){
+    print $user->firstname;
+    print " ";
+    print $user->lastname;
+    print "<br/>";
 }
-
-*/
  

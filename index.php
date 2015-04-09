@@ -40,20 +40,23 @@ $courseid = required_param('id', PARAM_INT);
 
 $users=$report->get_students($courseid);
 $assignments =$report->get_user_assignments($courseid);
-
+$assigncount=count($assignments);
 var_dump($assignments);
 
-print "<table border=1><thead><tr><th>User Name</th>";
+print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
 foreach ($assignments as $assign){
     print "<th>".$assign->assignment_name ."</th>";
     
 }
-print "<th>Total</th></tr><thead></table>";
+print "<th>Total</th></tr>";
 
 foreach($users as $user){
-    print $user->firstname;
-    print " ";
-    print $user->lastname;
-    print "<br/>";
+    print "<tr><td>".$user->firstname."</td>";
+    print "<td>".$user->lastname."</td>";
+    foreach ($assignments as $assign){
+        print "<td>".$assign->overallgrade."</td>";
+    }
+    print "<td>&nbsp;</td>";
+    print "</tr>";
 }
- 
+print "</table>";

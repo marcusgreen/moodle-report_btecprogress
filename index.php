@@ -35,14 +35,68 @@ $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_title('btecprogress', 'report_btecprogress');
 echo $OUTPUT->header();
 $report = new report_btecprogress();
-$report->init();
 $courseid = required_param('id', PARAM_INT);
+$report->init($courseid);
+
 
 $users=$report->get_students($courseid);
-$assignments =$report->get_user_assignments($courseid);
-$assigncount=count($assignments);
-var_dump($assignments);
+$assigns=$report->get_all_assigns($courseid);
 
+
+print "<br/><br/>";
+
+
+//$criteria=$report->get_assign_criteria($courseid);
+
+$maxcriteria=$report->get_max_criteria($courseid);
+
+//$assigncount=count($userassigns);
+$submissionstatus=$report->get_submission_status($courseid);
+
+
+print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
+foreach ($assigns as $a){
+    print "<th>".$a->assignment_name ."</th>";
+    
+}
+print "<th>Total</th></tr>";
+
+foreach($users as $user){
+    print "<tr><td>".$user->firstname."</td>";
+    print "<td>".$user->lastname."</td>";
+    $coursegrade=4;
+    $overallgrade=4;
+    foreach ($assigns as $a){
+       $usergrade= $report->get_user_grade($user,$a);
+       if($usergrade->assignid==0){
+        //   var_dump($usergrade);
+        //  exit();
+       }
+  
+       print "<td>".$usergrade->grade."</td>";
+
+       
+       // $status=$report->get_user_sub_status($user,$a,$submissionstatus);
+       // $max=$report->get_max_for_assign($maxcriteria,$a->cmid);
+       // $ug=$report->get_user_grade($user,$a,$userassigns);
+       // $grade=$report->num_to_letter($ug->overallgrade);
+       // if($grade=='N'){
+       //     $grade=$status;                    
+       // }
+       // 
+       // if(($ug->overallgrade) < $max){
+       //     $coursegrade=$max;
+       // }
+      //  print "<td>".$grade."</td>";
+
+
+    }
+   // print "<td>".$report->num_to_letter($coursegrade)."</td>";
+    print "</tr>";
+}
+print "</table>";
+
+/*
 print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
 foreach ($assignments as $assign){
     print "<th>".$assign->assignment_name ."</th>";
@@ -53,10 +107,26 @@ print "<th>Total</th></tr>";
 foreach($users as $user){
     print "<tr><td>".$user->firstname."</td>";
     print "<td>".$user->lastname."</td>";
+    $overallgrade=0;
     foreach ($assignments as $assign){
-        print "<td>".$assign->overallgrade."</td>";
+        print intval($assign->overallgrade);
+        switch (intval($assign->overallgrade)){
+            case 1;
+                $overallgrade='R';
+                break;
+            case 2;
+                $overallgrade='P';
+                break;
+            case 3;
+                $overallgrade='M';
+                break;
+            case 4;
+                $overallgrade='D';    
+        }
+        print "<td>".$overallgrade."</td>";
     }
     print "<td>&nbsp;</td>";
     print "</tr>";
 }
 print "</table>";
+*/

@@ -55,12 +55,17 @@ function report_btecprogress_extend_navigation_course($navigation, $course, $con
 }
 
 class report_btecprogress {
+    
+    private  $submissions;
+    private  $grades;
 
     /**
      * Initialises the report and sets the title
      */
-    public function init() {
+    public function init($courseid) {
         $this->title = get_string('title', 'report_btecprogress');
+        $this->submissions =$this->get_submissions($courseid);
+        $this->grades= $this->get_grades($courseid);
     }
  
     
@@ -74,52 +79,264 @@ public function get_students($courseid) {
         ORDER BY lastname ASC, firstname ASC, userid ASC', array($courseid));
 }
 
-public function get_course_assignments($courseid){
+ public function get_submission_status($courseid){
+ /*get list of submissions */    
+$sql="select asb.id asbid,a.id as assignid,u.id userid,c.id courseid,asb.status asbstatus FROM assign_submission AS asb
+JOIN assign AS a ON a.id = asb.assignment
+JOIN user AS u ON u.id = asb.userid
+JOIN course AS c ON c.id = a.course
+where c.id=? and asb.status='submitted'";
+global $DB;
+$records = $DB->get_records_sql($sql,array($courseid));
+ return $records;
     
-}
-    
- public function get_user_assignments(){
+ }  
+ 
+ public function get_user_sub_status($user,$assign,$submissionstatus){
+     $status="N";
+     foreach($submissionstatus as $s){
+         if (($user->userid==$s->userid )&& ($assign->assignid == $s->assignid)){
+             $status="!";
+             return $status;
+         }         
+     }
+     return $status;     
+ }
+ 
+ 
+ public function get_submissions($courseid){
      global $DB;
-     $sql="select gbc.id,gbc.sortorder, u.username, c.shortname as course ,a.name as assignment_name,  gbf.remark
+   /*  $sql="select gbc.id as gbcid,gbc.sortorder,cm.id as coursemodid,
+         u.id as userid, u.username, c.shortname as course ,
+         a.id as assignid,a.name as assignment_name,  gbf.remark
 as overallfeedback, 
-case gg.rawgrade 
-when 1 then  'R'
-when 2 then  'P'
-when 3 then  'M'
-when 4 then  'D'
-end
-as overallgrade
-
-
-from  gradingform_btec_fillings gbf 
-join gradingform_btec_criteria gbc on gbc.id=gbf.criterionid
-join assign as a on a.id=gbf.instanceid
-join assignfeedback_comments afc on a.id=afc.assignment
-join course_modules as cm on a.id=cm.instance
-join course as c on cm.course=c.id
-join modules as m on cm.module=m.id
-join grade_items gi on cm.instance=gi.iteminstance
-join scale s on gi.gradetype=s.id
-join grade_grades gg on gi.id=gg.itemid
-join user u on gg.userid=u.id
-where m.name='assign' and 
-s.name='BTEC' and gg.rawgrade is not null group by username";
-       $records = $DB->get_records_sql($sql);
-        return $records;
+gg.rawgrade as overallgrade
+    * */
+     
+$sql="select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from assign_submission as asub
+join assign as a on a.id =asub.assignment
+join course_modules as cm on cm.instance=a.id and cm.module=1
+join grade_items as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' and gi.scaleid=2
+join user as u on u.id=asub.userid
+join course as c on c.id=cm.course
+left join assign_grades ag on ag.assignment=asub.assignment and ag.userid=asub.userid
+where asub.status='submitted'
+and c.id=?
+order by asubid";  
+       $records = $DB->get_records_sql($sql,array($courseid));
+       return $records;
      
  }
-   public function get_grades() {
-        global $DB;
-        $sql = "select gbc.id, gbc.sortorder, u.username, c.shortname as course ,a.name as assignment_name,  gbc.shortname as criteria, gbf.remark, 
-if( gbf.score=0,'No','Y' ) as achieved, 
-case gg.rawgrade 
-when 1 then  'R'
-when 2 then  'P'
-when 3 then  'M'
-when 4 then  'D'
-end
+ 
+ public function get_user_submission($user,$submissions){
+     
+     foreach($submissions as $submit){
+         
+     }
+     
+ }
+ 
+ public function num_to_letter($number){
+            $letter="R";
+            switch ($number){
+            case 0;
+                $letter='N';
+                break;
+            case 1;
+                $letter='R';
+                break;
+            case 2;
+                $letter='P';
+                break;
+            case 3;
+                $letter='M';
+                break;
+            case 4;
+                $letter='D';    
+        }
+        return $letter;
 
-as overalgrade
+     
+ }
+ 
+ public function get_user_grade($user,$assign){     
+     $usergrade=new usergrade($user);   
+     foreach($this->submissions as $s){
+          if(($user->userid==$s->userid)&& ($s->coursemodid==$assign->coursemodid)){
+            if($s->grade==null){
+                /*no submission */
+                $usergrade->grade="!";
+             }else{
+                $usergrade->grade=$s->grade;
+                $usergrade->assignid=$s->assignid;
+             }
+         }         
+     }
+    
+     return $usergrade;
+ }
+ 
+ public function xget_user_grade($user,$assign,$userassigns){
+        $ug=new usergrade($user);
+        $submissionfound=false;
+        foreach($userassigns as $ua){
+         if(($ua->coursemodid==$assign->cmid) && ($ua->userid==$user->userid)){
+             $ug->overallgrade=$ua->overallgrade;  
+             $submissionfound=true;
+         }         
+     }   
+ return $ug;
+ }
+ 
+
+ 
+ /* get all btec graded assigns weather or not they 
+  * have submissions
+  */
+ 
+
+public function get_all_assigns ($courseid){
+    
+$sql="select distinct cm.id as coursemodid,a.id as assignid,ga.activemethod, gitems.id as itemid, gitems.itemname as assignment_name from scale as s 
+join grade_items gitems on gitems.gradetype=s.id 
+join course_modules cm on cm.instance=gitems.iteminstance 
+join context c on c.instanceid=cm.id
+join grading_areas ga on ga.contextid=c.id
+join modules m on m.id=cm.module
+join assign a on a.id=cm.instance
+join course crs on crs.id=cm.course
+where s.NAME='BTEC' and m.name='assign' and crs.id=?
+and activemethod='btec'";
+    
+global $DB;
+$records= $DB->get_records_sql($sql,array($courseid));
+return $records;
+
+}
+
+public function get_max_for_assign($maxcriterion,$cmid){
+    foreach($maxcriterion as $criteria){
+        if ($criteria->cmid==$cmid){
+            return $this->letter_to_num($criteria->shortname);
+        }
+    }  
+}
+
+public function letter_to_num($letter){
+            $num=0;
+            switch ($letter){
+            case 'P';
+                $num=1;
+                break;
+            case 'M';
+                $num='2';
+                break;
+            case 'D';
+                $num=3;
+                break;
+        }
+        return $num;
+}
+
+public function get_max_criteria($courseid){
+    
+$sql="select a.id,cm.id as cmid,a.name,shortname from  gradingform_btec_criteria as gbcout 
+join  grading_definitions gdef on gdef.id=gbcout.definitionid 
+join  grading_areas ga on ga.id=gdef.areaid 
+join  context con on con.id=ga.contextid 
+join  course_modules cm on cm.id=con.instanceid 
+join  assign a on a.id=cm.instance
+where shortname=(select min(shortname)from  gradingform_btec_criteria as gbcin 
+where gbcin.definitionid=gbcout.definitionid)";
+
+global $DB;
+$records= $DB->get_records_sql($sql,array($courseid));
+return $records;    
+}
+
+
+
+public function xget_max_criteria($courseid){
+    
+$sql="select gbc.id as gbcid, a.id as assignid,a.name,ga.activemethod,gdef.name,gbc.shortname as criteria
+from grading_areas ga 
+join context con on con.id=ga.contextid
+join course_modules cm on cm.id=con.instanceid
+join course c on c.id=cm.course
+join assign a on a.id=cm.instance
+join grading_definitions gdef on gdef.areaid=ga.id
+join gradingform_btec_criteria gbc on gbc.definitionid=gdef.id
+where c.id=? order by a.id,gbc.shortname";
+global $DB;
+$records= $DB->get_records_sql($sql,array($courseid));
+
+$criteria=array();
+foreach($records as $r){
+    $criteria[]=$r->assignid;    
+}
+$uc=array_unique($criteria);
+
+$maxcriteria=array();
+foreach($uc as $key=>$c ){
+    foreach($records as $r){
+        if($c[$key]=$r->assignid){
+            print $c[$key];
+            print " ";
+            print $r->assignid;
+        }
+    }
+}
+
+var_dump($maxcriteria);
+
+
+
+exit();
+
+return $records;             
+}
+
+
+
+public function get_assign_top_criteriaX($courseid){
+$sql="select a.id,a.name,gbcout.shortname from mdl_gradingform_btec_criteria as gbcout 
+join mdl_grading_definitions gdef on gdef.id=gbcout.definitionid 
+join mdl_grading_areas ga on ga.id=gdef.areaid 
+join mdl_context con on con.id=ga.contextid 
+join mdl_course_modules cm on cm.id=con.instanceid 
+join mdl_assign a on a.id=cm.instance 
+join mdl_course c on c.id=cm.course
+where gbcout.shortname=(select min(shortname)
+from mdl_gradingform_btec_criteria as gbcin 
+where gbcin.definitionid=gbcout.definitionid)
+and c.id=?";    
+global $DB;
+$records= $DB->get_records_sql($sql,array($courseid));
+return$records;
+
+    
+}
+ 
+   public function get_grades($courseid) {
+       global $DB;
+
+       $sql="select gg.id as gradeid,u.id as userid,u.firstname,u.lastname,cm.id,gi.itemname, gg.rawgrade from grade_grades as gg 
+           join user u on u.id=gg.userid 
+           join grade_items gi on gi.id=gg.itemid 
+           join scale s on s.id=gi.scaleid
+           join course c on c.id=gi.courseid
+           join course_modules cm on cm.instance=gi.iteminstance 
+           where gg.rawgrade is not null 
+           and gi.itemmodule='assign'
+           and s.name='BTEC'
+           and cm.course=?";
+       
+          $records = $DB->get_records_sql($sql,array($courseid));
+          return $records;
+       
+       /* $sql = "select u.id,gbc.id, gbc.sortorder, u.username, c.shortname as course ,a.name as assignment_name,  gbc.shortname as criteria, gbf.remark, 
+if( gbf.score=0,'No','Y' ) as achieved, 
+gg.rawgrade as overalgrade
 from  gradingform_btec_fillings gbf 
 join gradingform_btec_criteria gbc on gbc.id=gbf.criterionid
 join assign as a on a.id=gbf.instanceid
@@ -132,9 +349,11 @@ join scale s on gi.gradetype=s.id
 join grade_grades gg on gi.id=gg.itemid
 join user u on gg.userid=u.id
 where m.name='assign' and 
-s.name='BTEC' and gg.rawgrade is not null";
-        $records = $DB->get_records_sql($sql);
-        return $records;
+s.name='BTEC' and gg.rawgrade is not null and a.course=?";
+        $records = $DB->get_records_sql($sql,array($courseid));
+        * */
+      
+       // return $records;
         //admin_externalpage_setup('btecprogress', '', null, '', array('pagelayout' => 'report'));
         //$reportbtecprogress = new report_btecprogress_renderable();
     }
@@ -163,4 +382,13 @@ s.name='BTEC' and gg.rawgrade is not null";
         }
     }
 
+}
+class usergrade{
+    public $grade="N";
+    public $assignid=0;
+    public $user;
+    public function usergrade($user){
+        $this->user=$user;
+    }
+    
 }

@@ -57,7 +57,10 @@ $submissionstatus=$report->get_submission_status($courseid);
 print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
 foreach ($assigns as $a){
     print "<th>".$a->assignment_name ."</th>";
-    
+    $criteria=$report->get_assign_criteria($a->assignid);
+    foreach($criteria as $c){
+       print "<th>".$c."</th>";
+    }  
 }
 print "<th>Total</th></tr>";
 
@@ -66,32 +69,17 @@ foreach($users as $user){
     print "<td>".$user->lastname."</td>";
     $coursegrade=4;
     $overallgrade=4;
-    foreach ($assigns as $a){
+    $ug=$report->get_all_usergrades($user,$assigns);
+       foreach ($assigns as $a){
+       $criteria=$report->get_assign_criteria($a->assignid);
        $usergrade= $report->get_user_grade($user,$a);
-       if($usergrade->assignid==0){
-        //   var_dump($usergrade);
-        //  exit();
-       }
-  
-       print "<td>".$usergrade->grade."</td>";
-
-       
-       // $status=$report->get_user_sub_status($user,$a,$submissionstatus);
-       // $max=$report->get_max_for_assign($maxcriteria,$a->cmid);
-       // $ug=$report->get_user_grade($user,$a,$userassigns);
-       // $grade=$report->num_to_letter($ug->overallgrade);
-       // if($grade=='N'){
-       //     $grade=$status;                    
-       // }
-       // 
-       // if(($ug->overallgrade) < $max){
-       //     $coursegrade=$max;
-       // }
-      //  print "<td>".$grade."</td>";
-
+       print "<td>".$report->num_to_letter($usergrade->grade)."</td>";
+          foreach($criteria as $c){
+            print "<td>&nbsp;</td>";
+        } 
 
     }
-   // print "<td>".$report->num_to_letter($coursegrade)."</td>";
+   print "<td>".$report->num_to_letter($ug->modulegrade)."</td>";
     print "</tr>";
 }
 print "</table>";

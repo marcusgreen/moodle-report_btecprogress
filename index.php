@@ -57,10 +57,13 @@ $submissionstatus=$report->get_submission_status($courseid);
 print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
 foreach ($assigns as $a){
     print "<th>".$a->assignment_name ."</th>";
-    $criteria=$report->get_assign_criteria($a->assignid);
+    $criteria=$report->get_assign_criteria($a->coursemodid);
+  
     foreach($criteria as $c){
-       print "<th>".$c."</th>";
+  
+        print "<th>".$c->shortname."</th>";
     }  
+
 }
 print "<th>Total</th></tr>";
 
@@ -71,11 +74,13 @@ foreach($users as $user){
     $overallgrade=4;
     $ug=$report->get_all_usergrades($user,$assigns);
        foreach ($assigns as $a){
-       $criteria=$report->get_assign_criteria($a->assignid);
+       $criteria=$report->get_assign_criteria($a->coursemodid);
        $usergrade= $report->get_user_grade($user,$a);
        print "<td>".$report->num_to_letter($usergrade->grade)."</td>";
-          foreach($criteria as $c){
-            print "<td>&nbsp;</td>";
+           foreach($criteria as $c){
+    
+             
+            print "<td>".$report->get_user_criteria_grades($user->userid,$a->coursemodid,$c->criteriaid)."</td>";
         } 
 
     }

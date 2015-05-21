@@ -60,6 +60,7 @@ class report_btecprogress {
     private $grades;
     private $maxcriteria;
     private $assigncriteria;
+    private $criteriagrades;
 
     /**
      * Initialises the report and sets the title
@@ -70,6 +71,7 @@ class report_btecprogress {
         $this->grades = $this->get_grades($courseid);
         $this->maxcriteria=$this->get_max_criteria($courseid);
         $this->assigncriteria=$this->get_all_criteria($courseid);
+        $this->criteriagrades=$this->get_criteria_grades($courseid);
     }
 
     public function get_students($courseid) {
@@ -108,13 +110,6 @@ where c.id=? and asb.status='submitted'";
 
     public function get_submissions($courseid) {
         global $DB;
-        /*  $sql="select gbc.id as gbcid,gbc.sortorder,cm.id as coursemodid,
-          u.id as userid, u.username, c.shortname as course ,
-          a.id as assignid,a.name as assignment_name,  gbf.remark
-          as overallfeedback,
-          gg.rawgrade as overallgrade
-         * */
-
         $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from assign_submission as asub
 join assign as a on a.id =asub.assignment
 join course_modules as cm on cm.instance=a.id and cm.module=1
@@ -227,7 +222,7 @@ and activemethod='btec'";
     }
     
   public function get_criteria_grades($courseid){      
-      $sql="select gbc.id as criteriaid,a.id as assignid,u.id as userid,a.name,gbc.shortname,gbf.score as score from course as crs
+      $sql="select gbf.id,gbc.id as criteriaid,a.id as assignid, cm.id as coursemodid,u.id as userid,a.name,gbc.shortname,gbf.score as score from course as crs
 JOIN  course_modules  AS cm ON crs.id = cm.course
 JOIN  assign  AS a ON a.id = cm.instance
 JOIN  context  AS ctx ON cm.id = ctx.instanceid
@@ -247,20 +242,26 @@ and gd.method='btec'";
         return $records;  
       
   }
-
-  public function get_assign_criteria($assignid){
-      $criteria=array();
-      foreach($this->assigncriteria as $ac){
-          if($ac->assignid==$assignid){
-              $criteria[]=$ac->shortname;
+public function get_user_criteria_grades($userid,$coursemodid,$criteriaid){
+    foreach ($this->criteriagrades as $c){
+        if(($c->userid==$userid)&& ($c->coursemodid==$coursemodid) && ($c->criteriaid==$criteriaid)){
+           return $c->score;
+        }        
+    }
+  
+}
+  /* Gets the criteria for an individual assignment */
+  public function get_assign_criteria($coursemodid){
+      $criteria =  array();
+        foreach($this->assigncriteria as $ac){
+          if($ac->coursemodid==$coursemodid){
+            $criteria[]=$ac;
            }
-          
-      }
-      return $criteria;
-      
+       }
+       return $criteria;
   }
   public function get_all_criteria($courseid){
-      $sql="select gbc.id as criteriaid,a.id as assignid,a.name,gbc.shortname from assign as a 
+      $sql="select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from assign as a 
               join course_modules as cm on cm.instance=a.id 
               join context as ctx on ctx.instanceid=cm.id 
               join grading_areas as ga on ga.contextid=ctx.id 

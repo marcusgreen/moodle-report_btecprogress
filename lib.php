@@ -87,10 +87,10 @@ class report_btecprogress {
 
     public function get_submission_status($courseid) {
         /* get list of submissions */
-        $sql = "select asb.id asbid,a.id as assignid,u.id userid,c.id courseid,asb.status asbstatus FROM assign_submission AS asb
-JOIN assign AS a ON a.id = asb.assignment
-JOIN user AS u ON u.id = asb.userid
-JOIN course AS c ON c.id = a.course
+        $sql = "select asb.id asbid,a.id as assignid,u.id userid,c.id courseid,asb.status asbstatus FROM {assign_submission} AS asb
+JOIN {assign} AS a ON a.id = asb.assignment
+JOIN {user} AS u ON u.id = asb.userid
+JOIN {course} AS c ON c.id = a.course
 where c.id=? and asb.status='submitted'";
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
@@ -110,13 +110,13 @@ where c.id=? and asb.status='submitted'";
 
     public function get_submissions($courseid) {
         global $DB;
-        $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from assign_submission as asub
-join assign as a on a.id =asub.assignment
-join course_modules as cm on cm.instance=a.id and cm.module=1
-join grade_items as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' and gi.scaleid=2
-join user as u on u.id=asub.userid
-join course as c on c.id=cm.course
-left join assign_grades ag on ag.assignment=asub.assignment and ag.userid=asub.userid
+        $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from {assign_submission} as asub
+join {assign} as a on a.id =asub.assignment
+join {course_modules} as cm on cm.instance=a.id and cm.module=1
+join {grade_items} as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' and gi.scaleid=2
+join {user} as u on u.id=asub.userid
+join {course} as c on c.id=cm.course
+left join {assign_grades} ag on ag.assignment=asub.assignment and ag.userid=asub.userid
 where asub.status='submitted'
 and c.id=?
 order by asubid";
@@ -205,14 +205,14 @@ order by asubid";
 
     public function get_all_assigns($courseid) {
 
-        $sql = "select distinct cm.id as coursemodid,a.id as assignid,ga.activemethod, gitems.id as itemid, gitems.itemname as assignment_name from scale as s 
-join grade_items gitems on gitems.gradetype=s.id 
-join course_modules cm on cm.instance=gitems.iteminstance 
-join context c on c.instanceid=cm.id
-join grading_areas ga on ga.contextid=c.id
-join modules m on m.id=cm.module
-join assign a on a.id=cm.instance
-join course crs on crs.id=cm.course
+        $sql = "select distinct cm.id as coursemodid,a.id as assignid,ga.activemethod, gitems.id as itemid, gitems.itemname as assignment_name from {scale} as s 
+join {grade_items} gitems on gitems.gradetype=s.id 
+join {course_modules} cm on cm.instance=gitems.iteminstance 
+join {context} c on c.instanceid=cm.id
+join {grading_areas} ga on ga.contextid=c.id
+join {modules} m on m.id=cm.module
+join {assign} a on a.id=cm.instance
+join {course} crs on crs.id=cm.course
 where s.NAME='BTEC' and m.name='assign' and crs.id=?
 and activemethod='btec'";
 
@@ -222,17 +222,17 @@ and activemethod='btec'";
     }
     
   public function get_criteria_grades($courseid){      
-      $sql="select gbf.id,gbc.id as criteriaid,a.id as assignid, cm.id as coursemodid,u.id as userid,a.name,gbc.shortname,gbf.score as score from course as crs
-JOIN  course_modules  AS cm ON crs.id = cm.course
-JOIN  assign  AS a ON a.id = cm.instance
-JOIN  context  AS ctx ON cm.id = ctx.instanceid
-JOIN  grading_areas  AS ga ON ctx.id=ga.contextid
-JOIN  grading_definitions  AS gd ON ga.id = gd.areaid
-JOIN  gradingform_btec_criteria  AS gbc ON (gbc.definitionid = gd.id)
-JOIN  grading_instances  AS gin ON gin.definitionid = gd.id
-JOIN  assign_grades  AS ag ON ag.id = gin.itemid
-JOIN  user  AS u ON u.id = ag.userid
-JOIN  gradingform_btec_fillings  AS gbf ON (gbf.instanceid = gin.id)
+      $sql="select gbf.id,gbc.id as criteriaid,a.id as assignid, cm.id as coursemodid,u.id as userid,a.name,gbc.shortname,gbf.score as score from {course} as crs
+JOIN  {course_modules}  AS cm ON crs.id = cm.course
+JOIN  {assign}  AS a ON a.id = cm.instance
+JOIN  {context}  AS ctx ON cm.id = ctx.instanceid
+JOIN  {grading_areas}  AS ga ON ctx.id=ga.contextid
+JOIN  {grading_definitions}  AS gd ON ga.id = gd.areaid
+JOIN  {gradingform_btec_criteria}  AS gbc ON (gbc.definitionid = gd.id)
+JOIN  {grading_instances}  AS gin ON gin.definitionid = gd.id
+JOIN  {assign_grades}  AS ag ON ag.id = gin.itemid
+JOIN  {user}  AS u ON u.id = ag.userid
+JOIN  {gradingform_btec_fillings}  AS gbf ON (gbf.instanceid = gin.id)
 AND (gbf.criterionid = gbc.id)
 WHERE  gin.status = 1
 and cm.module=1 and cm.course=?
@@ -245,11 +245,24 @@ and gd.method='btec'";
 public function get_user_criteria_grades($userid,$coursemodid,$criteriaid){
     foreach ($this->criteriagrades as $c){
         if(($c->userid==$userid)&& ($c->coursemodid==$coursemodid) && ($c->criteriaid==$criteriaid)){
-           return $c->score;
+           return $this->critera_num_to_letter($c->score);
+            //return $c->score;
         }        
     }
   
 }
+
+public function critera_num_to_letter($criterianum){
+        switch ($criterianum) {
+            case '0';
+                return 'N';
+            case '1';
+                return 'A';
+        }
+        return '?';
+    
+}
+
   /* Gets the criteria for an individual assignment */
   public function get_assign_criteria($coursemodid){
       $criteria =  array();
@@ -261,12 +274,12 @@ public function get_user_criteria_grades($userid,$coursemodid,$criteriaid){
        return $criteria;
   }
   public function get_all_criteria($courseid){
-      $sql="select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from assign as a 
-              join course_modules as cm on cm.instance=a.id 
-              join context as ctx on ctx.instanceid=cm.id 
-              join grading_areas as ga on ga.contextid=ctx.id 
-              JOIN grading_definitions AS gd ON ga.id = gd.areaid 
-              JOIN gradingform_btec_criteria AS gbc ON (gbc.definitionid = gd.id) 
+      $sql="select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from {assign} as a 
+              join {course_modules} as cm on cm.instance=a.id 
+              join {context} as ctx on ctx.instanceid=cm.id 
+              join {grading_areas} as ga on ga.contextid=ctx.id 
+              JOIN {grading_definitions} AS gd ON ga.id = gd.areaid 
+              JOIN {gradingform_btec_criteria} AS gbc ON (gbc.definitionid = gd.id) 
               and cm.module=1 and cm.course=? order by a.name";
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
@@ -295,13 +308,13 @@ public function letter_to_num($letter) {
     
     public function get_max_criteria($courseid) {
 
-        $sql = "select a.id,cm.id as cmid,a.name,shortname from  gradingform_btec_criteria as gbcout 
-join  grading_definitions gdef on gdef.id=gbcout.definitionid 
-join  grading_areas ga on ga.id=gdef.areaid 
-join  context con on con.id=ga.contextid 
-join  course_modules cm on cm.id=con.instanceid 
-join  assign a on a.id=cm.instance
-where shortname=(select min(shortname)from  gradingform_btec_criteria as gbcin 
+        $sql = "select a.id,cm.id as cmid,a.name,shortname from  {gradingform_btec_criteria} as gbcout 
+join  {grading_definitions} gdef on gdef.id=gbcout.definitionid 
+join  {grading_areas} ga on ga.id=gdef.areaid 
+join  {context} con on con.id=ga.contextid 
+join  {course_modules} cm on cm.id=con.instanceid 
+join  {assign} a on a.id=cm.instance
+where shortname=(select min(shortname)from  {gradingform_btec_criteria} as gbcin 
 where gbcin.definitionid=gbcout.definitionid)";
 
         global $DB;
@@ -313,16 +326,20 @@ where gbcin.definitionid=gbcout.definitionid)";
     public function get_grades($courseid) {
         global $DB;
 
-        $sql = "select gg.id as gradeid,u.id as userid,u.firstname,u.lastname,cm.id,gi.itemname, gg.rawgrade from grade_grades as gg 
-           join user u on u.id=gg.userid 
-           join grade_items gi on gi.id=gg.itemid 
-           join scale s on s.id=gi.scaleid
-           join course c on c.id=gi.courseid
-           join course_modules cm on cm.instance=gi.iteminstance 
-           where gg.rawgrade is not null 
+        $sql = "select gg.id,u.id as userid,u.firstname,u.lastname,gi.itemname, gg.rawgrade from   {grade_grades}  as gg 
+           join  {user}  u on u.id=gg.userid 
+           join  {grade_items} gi on gi.id=gg.itemid 
+           join  {scale}  s on s.id=gi.scaleid
+           join  {course}  c on c.id=gi.courseid
+           join  {course_modules}  cm on cm.instance=gi.iteminstance 
+           join  {modules}  on {modules}.id=cm.module
+	   where gg.rawgrade is not null 
+	   and {modules}.name='assign'
+	   and gi.itemtype is not null
            and gi.itemmodule='assign'
            and s.name='BTEC'
            and cm.course=?";
+		   
 
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;

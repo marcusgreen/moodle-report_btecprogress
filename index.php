@@ -77,10 +77,18 @@ foreach($users as $user){
        $criteria=$report->get_assign_criteria($a->coursemodid);
        $usergrade= $report->get_user_grade($user,$a);
        print "<td>".$report->num_to_letter($usergrade->grade)."</td>";
-           foreach($criteria as $c){
-    
-             
-            print "<td>".$report->get_user_criteria_grades($user->userid,$a->coursemodid,$c->criteriaid)."</td>";
+      // print "<td>".$usergrade->grade."</td>";
+       foreach($criteria as $c){
+                 
+         $g=$report->get_user_criteria_grades($user->userid,$a->coursemodid,$c->criteriaid);
+         if($g=='A'){
+             $tag='<td class="achieved">';
+         }else{
+             $tag='<td>';
+         }
+         print $tag;
+         print $g;
+         print '</td>';
         } 
 
     }

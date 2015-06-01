@@ -76,13 +76,16 @@ foreach($users as $user){
        foreach ($assigns as $a){
        $criteria=$report->get_assign_criteria($a->coursemodid);
        $usergrade= $report->get_user_grade($user,$a);
-       print "<td>".$report->num_to_letter($usergrade->grade)."</td>";
+       $link="<a href=../../mod/assign/view.php?id=".$a->coursemodid."&rownum=0&action=grade>";
+       print "<td>".$link.$report->num_to_letter($usergrade->grade)."</a></td>";
       // print "<td>".$usergrade->grade."</td>";
        foreach($criteria as $c){
                  
          $g=$report->get_user_criteria_grades($user->userid,$a->coursemodid,$c->criteriaid);
          if($g=='A'){
              $tag='<td class="achieved">';
+         }else if ($g=='N'){
+             $tag='<td class="notmet">';
          }else{
              $tag='<td>';
          }
@@ -92,7 +95,12 @@ foreach($users as $user){
         } 
 
     }
-   print "<td>".$report->num_to_letter($ug->modulegrade)."</td>";
+     
+   $overallgrade=$report->num_to_letter($ug->modulegrade);
+   $tag='<td class='.$report->grade_style($overallgrade).'>';
+   print $tag;
+   print $overallgrade;
+   
     print "</tr>";
 }
 print "</table>";

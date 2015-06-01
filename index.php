@@ -76,8 +76,9 @@ foreach($users as $user){
        foreach ($assigns as $a){
        $criteria=$report->get_assign_criteria($a->coursemodid);
        $usergrade= $report->get_user_grade($user,$a);
+       
        $link="<a href=../../mod/assign/view.php?id=".$a->coursemodid."&rownum=0&action=grade>";
-       print "<td>".$link.$report->num_to_letter($usergrade->grade)."</a></td>";
+       print "<td>".$link.$usergrade->grade."</a></td>";
       // print "<td>".$usergrade->grade."</td>";
        foreach($criteria as $c){
                  

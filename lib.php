@@ -69,9 +69,9 @@ class report_btecprogress {
         $this->title = get_string('title', 'report_btecprogress');
         $this->submissions = $this->get_submissions($courseid);
         $this->grades = $this->get_grades($courseid);
-        $this->maxcriteria=$this->get_max_criteria($courseid);
-        $this->assigncriteria=$this->get_all_criteria($courseid);
-        $this->criteriagrades=$this->get_criteria_grades($courseid);
+        $this->maxcriteria = $this->get_max_criteria($courseid);
+        $this->assigncriteria = $this->get_all_criteria($courseid);
+        $this->criteriagrades = $this->get_criteria_grades($courseid);
     }
 
     public function get_students($courseid) {
@@ -83,7 +83,6 @@ class report_btecprogress {
         WHERE enr.courseid = ?
         ORDER BY lastname ASC, firstname ASC, userid ASC', array($courseid));
     }
-    
 
     public function get_submission_status($courseid) {
         /* get list of submissions */
@@ -131,15 +130,14 @@ order by asubid";
         }
     }
 
-    
-    public function grade_style($overallgrade){
+    public function grade_style($overallgrade) {
         $style = "";
         switch ($overallgrade) {
             case 'R';
-            $style = 'refer';
+                $style = 'refer';
                 break;
             case 'P';
-                $style= 'pass';
+                $style = 'pass';
                 break;
             case 'M';
                 $style = 'merit';
@@ -148,9 +146,8 @@ order by asubid";
                 $style = 'distinction';
         }
         return $style;
-        
     }
-    
+
     public function num_to_letter($number) {
         $letter = "R";
         switch ($number) {
@@ -171,14 +168,13 @@ order by asubid";
         }
         return $letter;
     }
-    
-    public function get_max_grade($assignid){
-        foreach($this->maxcriteria as $criteria){
-                if($criteria->id==$assignid){
-                    return $this->letter_to_num(substr($criteria->shortname,0,1));
-                }
+
+    public function get_max_grade($assignid) {
+        foreach ($this->maxcriteria as $criteria) {
+            if ($criteria->id == $assignid) {
+                return $this->letter_to_num(substr($criteria->shortname, 0, 1));
             }
-                   
+        }
     }
 
     public function get_user_grade($user, $assign) {
@@ -186,17 +182,31 @@ order by asubid";
         foreach ($this->submissions as $s) {
             if (($user->userid == $s->userid) && ($s->coursemodid == $assign->coursemodid)) {
                 if ($s->grade == null) {
-                    /* no submission */
-                    $usergrade->grade = "!";
+                    /* no submission or no mark */
+                    $usergrade->grade = $this->check_submission($user, $assign);
                 } else {
-                    $usergrade->grade = $s->grade;
+                    $usergrade->grade = $this->num_to_letter($s->grade);
+                    //$usergrade->grade = $s->grade;
                     $usergrade->assignid = $s->assignid;
-  
-                    $usergrade->addgrade($s->grade,$this->get_max_grade($s->assignid));
+                    $usergrade->addgrade($s->grade, $this->get_max_grade($s->assignid));
                 }
             }
         }
         return $usergrade;
+    }
+
+    public function check_submission($user, $assign) {
+        $sql="select asub.id,a.name from course_modules cm
+            join assign as a on a.id=cm.instance
+            join assign_submission as asub on asub.assignment=a.id
+            and asub.userid=? and cm.id=?";
+        global $DB;
+        $records = $DB->get_records_sql($sql, array($user->userid,$assign->coursemodid));
+        if(count($records)>0){
+            return "!";
+        }else{
+            return "N";
+        }
     }
 
     public function get_all_usergrades($user, $assigns) {
@@ -210,14 +220,13 @@ order by asubid";
                     } else {
                         $usergrade->grade = $s->grade;
                         $usergrade->assignid = $s->assignid;
-                        $usergrade->addgrade($s->grade,$this->get_max_grade($s->assignid));
-
+                        $usergrade->addgrade($s->grade, $this->get_max_grade($s->assignid));
                     }
                 }
             }
         }
         return $usergrade;
-  }
+    }
 
     /* get all btec graded assigns weather or not they 
      * have submissions
@@ -240,9 +249,9 @@ and activemethod='btec'";
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
-    
-  public function get_criteria_grades($courseid){      
-      $sql="select gbf.id,gbc.id as criteriaid,a.id as assignid, cm.id as coursemodid,u.id as userid,a.name,gbc.shortname,gbf.score as score from {course} as crs
+
+    public function get_criteria_grades($courseid) {
+        $sql = "select gbf.id,gbc.id as criteriaid,a.id as assignid, cm.id as coursemodid,u.id as userid,a.name,gbc.shortname,gbf.score as score from {course} as crs
 JOIN  {course_modules}  AS cm ON crs.id = cm.course
 JOIN  {assign}  AS a ON a.id = cm.instance
 JOIN  {context}  AS ctx ON cm.id = ctx.instanceid
@@ -259,20 +268,19 @@ and cm.module=1 and cm.course=?
 and gd.method='btec'";
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
-        return $records;  
-      
-  }
-public function get_user_criteria_grades($userid,$coursemodid,$criteriaid){
-    foreach ($this->criteriagrades as $c){
-        if(($c->userid==$userid)&& ($c->coursemodid==$coursemodid) && ($c->criteriaid==$criteriaid)){
-           return $this->critera_num_to_letter($c->score);
-            //return $c->score;
-        }        
+        return $records;
     }
-  
-}
 
-public function critera_num_to_letter($criterianum){
+    public function get_user_criteria_grades($userid, $coursemodid, $criteriaid) {
+        foreach ($this->criteriagrades as $c) {
+            if (($c->userid == $userid) && ($c->coursemodid == $coursemodid) && ($c->criteriaid == $criteriaid)) {
+                return $this->critera_num_to_letter($c->score);
+                //return $c->score;
+            }
+        }
+    }
+
+    public function critera_num_to_letter($criterianum) {
         switch ($criterianum) {
             case '0';
                 return 'N';
@@ -280,21 +288,22 @@ public function critera_num_to_letter($criterianum){
                 return 'A';
         }
         return '?';
-    
-}
+    }
 
-  /* Gets the criteria for an individual assignment */
-  public function get_assign_criteria($coursemodid){
-      $criteria =  array();
-        foreach($this->assigncriteria as $ac){
-          if($ac->coursemodid==$coursemodid){
-            $criteria[]=$ac;
-           }
-       }
-       return $criteria;
-  }
-  public function get_all_criteria($courseid){
-      $sql="select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from {assign} as a 
+    /* Gets the criteria for an individual assignment */
+
+    public function get_assign_criteria($coursemodid) {
+        $criteria = array();
+        foreach ($this->assigncriteria as $ac) {
+            if ($ac->coursemodid == $coursemodid) {
+                $criteria[] = $ac;
+            }
+        }
+        return $criteria;
+    }
+
+    public function get_all_criteria($courseid) {
+        $sql = "select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from {assign} as a 
               join {course_modules} as cm on cm.instance=a.id 
               join {context} as ctx on ctx.instanceid=cm.id 
               join {grading_areas} as ga on ga.contextid=ctx.id 
@@ -304,14 +313,13 @@ public function critera_num_to_letter($criterianum){
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
-                
-}
-    
-public function letter_to_num($letter) {
+    }
+
+    public function letter_to_num($letter) {
         $num = 0;
         switch ($letter) {
             case 'N';
-                $num=1;
+                $num = 1;
             case 'P';
                 $num = 2;
                 break;
@@ -325,7 +333,6 @@ public function letter_to_num($letter) {
         return $num;
     }
 
-    
     public function get_max_criteria($courseid) {
 
         $sql = "select a.id,cm.id as cmid,a.name,shortname from  {gradingform_btec_criteria} as gbcout 
@@ -342,7 +349,6 @@ where gbcin.definitionid=gbcout.definitionid)";
         return $records;
     }
 
-  
     public function get_grades($courseid) {
         global $DB;
 
@@ -359,11 +365,10 @@ where gbcin.definitionid=gbcout.definitionid)";
            and gi.itemmodule='assign'
            and s.name='BTEC'
            and cm.course=?";
-		   
+
 
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
-
     }
 
     /**
@@ -399,20 +404,18 @@ class usergrade {
     public $user;
     public $modulegrade;
     private $grades = array();
- 
-    public function addgrade($grade,$maxgrade) {
+
+    public function addgrade($grade, $maxgrade) {
         $this->grades[]['grade'] = $grade;
         $this->grades[]['maxgrade'] = $maxgrade;
-        if ($grade < $maxgrade){
-            $this->modulegrade=$grade;
+        if ($grade < $maxgrade) {
+            $this->modulegrade = $grade;
         }
-
-        
     }
 
     public function usergrade($user) {
         $this->user = $user;
-        $this->modulegrade=4;
+        $this->modulegrade = 4;
     }
 
 }

@@ -131,6 +131,26 @@ order by asubid";
         }
     }
 
+    
+    public function grade_style($overallgrade){
+        $style = "";
+        switch ($overallgrade) {
+            case 'R';
+            $style = 'refer';
+                break;
+            case 'P';
+                $style= 'pass';
+                break;
+            case 'M';
+                $style = 'merit';
+                break;
+            case 'D';
+                $style = 'distinction';
+        }
+        return $style;
+        
+    }
+    
     public function num_to_letter($number) {
         $letter = "R";
         switch ($number) {

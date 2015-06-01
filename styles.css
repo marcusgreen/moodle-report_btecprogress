@@ -1,3 +1,22 @@
 .achieved{
     background-color:green;
 }
+.notmet{
+    background-color:red;
+}
+.nosubmit{
+    background-color:pink;
+}
+.refer{
+    background-color:red;
+}
+.pass{
+    background-color:orange;    
+}
+.merit{
+    background-color:yellow;
+}
+.distinction{
+    background-color:green;
+    
+}

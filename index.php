@@ -45,6 +45,8 @@ $assigns=$report->get_all_assigns($courseid);
 
 print "<br/><br/>";
 
+print $report->course->fullname;
+
 
 //$criteria=$report->get_assign_criteria($courseid);
 
@@ -73,6 +75,7 @@ foreach($users as $user){
     $coursegrade=4;
     $overallgrade=4;
     $ug=$report->get_all_usergrades($user,$assigns);
+    
        foreach ($assigns as $a){
        $criteria=$report->get_assign_criteria($a->coursemodid);
        $usergrade= $report->get_user_grade($user,$a);
@@ -97,7 +100,8 @@ foreach($users as $user){
 
     }
      
-   $overallgrade=$report->num_to_letter($ug->modulegrade);
+   /*calculated grade for all assignments */
+    $overallgrade=$report->num_to_letter($ug->modulegrade);
    $tag='<td class='.$report->grade_style($overallgrade).'>';
    print $tag;
    print $overallgrade;

@@ -61,6 +61,8 @@ class report_btecprogress {
     private $maxcriteria;
     private $assigncriteria;
     private $criteriagrades;
+    public $course;
+    
 
     /**
      * Initialises the report and sets the title
@@ -72,8 +74,15 @@ class report_btecprogress {
         $this->maxcriteria = $this->get_max_criteria($courseid);
         $this->assigncriteria = $this->get_all_criteria($courseid);
         $this->criteriagrades = $this->get_criteria_grades($courseid);
+        $this->course=$this->get_course($courseid);
     }
 
+    public function get_course($courseid){
+        global $DB;
+        $sql="select * from course where id =?";
+        return $DB->get_record('course',array('id'=>$courseid));        
+    }
+    
     public function get_students($courseid) {
         global $DB;
         return $DB->get_records_sql('SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
@@ -112,13 +121,16 @@ where c.id=? and asb.status='submitted'";
         $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from {assign_submission} as asub
 join {assign} as a on a.id =asub.assignment
 join {course_modules} as cm on cm.instance=a.id and cm.module=1
-join {grade_items} as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' and gi.scaleid=2
+join {grade_items} as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' 
+join {scale} as s on s.id=gi.scaleid
 join {user} as u on u.id=asub.userid
 join {course} as c on c.id=cm.course
 left join {assign_grades} ag on ag.assignment=asub.assignment and ag.userid=asub.userid
 where asub.status='submitted'
+and s.name='BTEC'
 and c.id=?
 order by asubid";
+  
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
@@ -235,7 +247,7 @@ order by asubid";
     public function get_all_assigns($courseid) {
 
         $sql = "select distinct cm.id as coursemodid,a.id as assignid,ga.activemethod, gitems.id as itemid, gitems.itemname as assignment_name from {scale} as s 
-join {grade_items} gitems on gitems.gradetype=s.id 
+join {grade_items} gitems on gitems.scaleid=s.id 
 join {course_modules} cm on cm.instance=gitems.iteminstance 
 join {context} c on c.instanceid=cm.id
 join {grading_areas} ga on ga.contextid=c.id
@@ -410,12 +422,13 @@ class usergrade {
         $this->grades[]['maxgrade'] = $maxgrade;
         if ($grade < $maxgrade) {
             $this->modulegrade = $grade;
+
         }
     }
 
     public function usergrade($user) {
         $this->user = $user;
-        $this->modulegrade = 4;
+        $this->modulegrade = 0;
     }
 
 }

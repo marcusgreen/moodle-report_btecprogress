@@ -1,3 +1,21 @@
+
+.assignodd{
+    background-color:#D3D3D3;
+    /*lightgrey*/
+}
+
+.assigneven{ 
+    background-color:#BABABA;
+}
+.nameheader{
+    background-color:#76C2FC;    
+}
+.totalcol{
+    background-color:salmon;
+}
+.username{
+    background-color: lightblue;
+}
 .achieved{
     background-color:green;
 }
@@ -17,6 +35,5 @@
     background-color:yellow;
 }
 .distinction{
-    background-color:green;
-    
+    background-color:green;    
 }

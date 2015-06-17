@@ -28,6 +28,14 @@ require_once($CFG->libdir.'/adminlib.php');
 
 
 global $PAGE, $COURSE, $DB, $CFG;
+
+$courseid = required_param('id', PARAM_INT);
+
+// Check permissions
+require_login($courseid);
+
+//require_capability('report/completion:view', $context);
+
 $PAGE->set_context(context_course::instance($COURSE->id));
 $PAGE->set_url('/report/btecprogress/index.php');
 $PAGE->set_pagelayout('report');
@@ -35,12 +43,13 @@ $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_title('btecprogress', 'report_btecprogress');
 echo $OUTPUT->header();
 $report = new report_btecprogress();
-$courseid = required_param('id', PARAM_INT);
+
 $report->init($courseid);
 
 
 $users=$report->get_students($courseid);
 $assigns=$report->get_all_assigns($courseid);
+
 
 
 print "<br/><br/>";
@@ -56,22 +65,30 @@ $maxcriteria=$report->get_max_criteria($courseid);
 $submissionstatus=$report->get_submission_status($courseid);
 
 
-print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
+print "<table border=1><thead><tr><th class=nameheader>First Name</th><th class=nameheader"
+. ">Last Name </th>";
+$counter=0;
 foreach ($assigns as $a){
-    print "<th>".$a->assignment_name ."</th>";
+    $counter++;
+    if($counter % 2 ==0){
+        $assignclass="assigneven";
+    }else{
+        $assignclass="assignodd";            
+    }
+    print "<th class=".$assignclass.">".$a->assignment_name ."</th>";
     $criteria=$report->get_assign_criteria($a->coursemodid);
   
-    foreach($criteria as $c){
-  
-        print "<th>".$c->shortname."</th>";
+    foreach($criteria as $c){  
+        print "<th class=".$assignclass.">".$c->shortname."</th>";
     }  
 
 }
-print "<th>Total</th></tr>";
+print "<th class=totalcol>Total</th></tr>";
 
 foreach($users as $user){
-    print "<tr><td>".$user->firstname."</td>";
-    print "<td>".$user->lastname."</td>";
+    print "<tr><td class=username>".$user->firstname."</td>";
+    print "<td class"
+    . "=username>".$user->lastname."</td>";
     $coursegrade=4;
     $overallgrade=4;
     $ug=$report->get_all_usergrades($user,$assigns);

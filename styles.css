@@ -1,4 +1,17 @@
+/*.path-report-btecprogress table.dataTable {
+	margin: 0 auto;
+	clear: both;
+	width: 100%;
+}
 
+.path-report-btecprogress table.dataTable thead th {
+	padding: 3px 18px 3px 10px;
+	border-bottom: 1px solid black;
+	font-weight: bold;
+	cursor: pointer;
+	*cursor: hand;
+}
+*/
 .assignodd{
     background-color:#D3D3D3;
     /*lightgrey*/

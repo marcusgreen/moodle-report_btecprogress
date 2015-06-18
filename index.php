@@ -33,6 +33,10 @@ $courseid = required_param('id', PARAM_INT);
 
 // Check permissions
 require_login($courseid);
+$PAGE->requires->jquery();
+$PAGE->requires->jquery_plugin('dataTables', 'report_btecprogress');
+$PAGE->requires->jquery_plugin('footable', 'report_btecprogress');
+$PAGE->requires->jquery_plugin('tooltip', 'report_btecprogress');
 
 //require_capability('report/completion:view', $context);
 
@@ -45,6 +49,7 @@ echo $OUTPUT->header();
 $report = new report_btecprogress();
 
 $report->init($courseid);
+
 
 
 $users=$report->get_students($courseid);
@@ -65,8 +70,11 @@ $maxcriteria=$report->get_max_criteria($courseid);
 $submissionstatus=$report->get_submission_status($courseid);
 
 
-print "<table border=1><thead><tr><th class=nameheader>First Name</th><th class=nameheader"
-. ">Last Name </th>";
+print "<table class='grades' border='1' width=80%>";
+echo "<thead>";
+echo "<tr>";
+echo "<th class=nameheader >First Name</th>";
+echo "<th class=nameheader >Last Name</th>";
 $counter=0;
 foreach ($assigns as $a){
     $counter++;
@@ -84,11 +92,15 @@ foreach ($assigns as $a){
 
 }
 print "<th class=totalcol>Total</th></tr>";
+echo "</thead>";
 
 foreach($users as $user){
-    print "<tr><td class=username>".$user->firstname."</td>";
-    print "<td class"
-    . "=username>".$user->lastname."</td>";
+    print "<tr><td class=username footable-sortable>".$user->firstname."</td>";
+    print "<td class=username>".$user->lastname;
+    print '<span class="footable-sort-indicator" > </span>';
+            
+            
+    echo "</td>";
     $coursegrade=4;
     $overallgrade=4;
     $ug=$report->get_all_usergrades($user,$assigns);
@@ -125,9 +137,33 @@ foreach($users as $user){
    
     print "</tr>";
 }
+
+
+
 print "</table>";
+echo "<script>$('.grades').dataTable({"
+. "aaSorting: [],"
+. "iDisplayLength:20,"
+. "aLengthMenu : [20,30],"    
+. "bJQueryUI : true"
+        . "});"
+        . "</script>";
+
 
 /*
+ * http://themergency.com/footable-demo/responsive-container.htm
+    $(document).ready(function() { 
+                 oTable = $('#personsList').dataTable({
+                "bJQueryUI": true,
+                "sPaginationType": "full_numbers",
+                "iDisplayLength": 25,
+                "aLengthMenu": [25, 50, 100, 150],
+                "aaSorting": [[0,'asc']],      //Sorts 1st column asc              
+                "bPaginate": false              
+            });
+ * 
+ * 
+ * 
 print "<table border=1><thead><tr><th>First Name</th><th>Last Name </th>";
 foreach ($assignments as $assign){
     print "<th>".$assign->assignment_name ."</th>";

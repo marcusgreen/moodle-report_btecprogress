@@ -35,10 +35,6 @@ $courseid = required_param('id', PARAM_INT);
 require_login($courseid);
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('dataTables', 'report_btecprogress');
-$PAGE->requires->jquery_plugin('footable', 'report_btecprogress');
-$PAGE->requires->jquery_plugin('tooltip', 'report_btecprogress');
-
-//require_capability('report/completion:view', $context);
 
 $PAGE->set_context(context_course::instance($COURSE->id));
 $PAGE->set_url('/report/btecprogress/index.php');
@@ -55,9 +51,13 @@ $report->init($courseid);
 $users=$report->get_students($courseid);
 $assigns=$report->get_all_assigns($courseid);
 
+echo html_writer::select($report->groups, "group");
 
 
-print "<br/><br/>";
+
+echo "<br/><br/>";
+
+ 
 
 print $report->course->fullname;
 
@@ -70,11 +70,11 @@ $maxcriteria=$report->get_max_criteria($courseid);
 $submissionstatus=$report->get_submission_status($courseid);
 
 
-print "<table class='grades' border='1' width=80%>";
+print "<table id='grades' border='1' width=95%>";
 echo "<thead>";
 echo "<tr>";
-echo "<th class=nameheader >First Name</th>";
-echo "<th class=nameheader >Last Name</th>";
+echo "<th>First Name</th>";
+echo "<th>Last Name</th>";
 $counter=0;
 foreach ($assigns as $a){
     $counter++;
@@ -83,45 +83,37 @@ foreach ($assigns as $a){
     }else{
         $assignclass="assignodd";            
     }
-    print "<th class=".$assignclass.">".$a->assignment_name ."</th>";
+    print "<th>".$a->assignment_name ."</th>";
     $criteria=$report->get_assign_criteria($a->coursemodid);
   
     foreach($criteria as $c){  
-        print "<th class=".$assignclass.">".$c->shortname."</th>";
+        print "<th>".$c->shortname."</th>";
     }  
 
 }
-print "<th class=totalcol>Total</th></tr>";
+print "<th>Total</th></tr>";
 echo "</thead>";
 
 foreach($users as $user){
-    print "<tr><td class=username footable-sortable>".$user->firstname."</td>";
-    print "<td class=username>".$user->lastname;
-    print '<span class="footable-sort-indicator" > </span>';
-            
-            
-    echo "</td>";
+    print "<tr><td>".$user->firstname."</td>";
+    print "<td>".$user->lastname. "</td>";
     $coursegrade=4;
     $overallgrade=4;
-    $ug=$report->get_all_usergrades($user,$assigns);
-    
+    $ug=$report->get_all_usergrades($user,$assigns);    
        foreach ($assigns as $a){
-       $criteria=$report->get_assign_criteria($a->coursemodid);
-       $usergrade= $report->get_user_grade($user,$a);
+       $criteria=$report->get_assign_criteria($a->coursemodid);       $usergrade= $report->get_user_grade($user,$a);
        
        $link="<a href=../../mod/assign/view.php?id=".$a->coursemodid."&rownum=0&action=grade>";
        print "<td>".$link.$usergrade->grade."</a></td>";
-      // print "<td>".$usergrade->grade."</td>";
-       foreach($criteria as $c){
-                 
+       foreach($criteria as $c){                 
          $g=$report->get_user_criteria_grades($user->userid,$a->coursemodid,$c->criteriaid);
          if($g=='A'){
              $tag='<td class="achieved">';
          }else if ($g=='N'){
              $tag='<td class="notmet">';
          }else{
-             $tag='<td>';
-         }
+             $tag='<td>';         }
+         
          print $tag;
          print $g;
          print '</td>';
@@ -130,22 +122,25 @@ foreach($users as $user){
     }
      
    /*calculated grade for all assignments */
-    $overallgrade=$report->num_to_letter($ug->modulegrade);
-   $tag='<td class='.$report->grade_style($overallgrade).'>';
-   print $tag;
-   print $overallgrade;
-   
-    print "</tr>";
+  $overallgrade=$report->num_to_letter($ug->modulegrade);
+  $tag='<td class='.$report->grade_style($overallgrade).'>';
+  print $tag;
+  print $overallgrade;
+  echo "</td>";
+  print "</tr>";
 }
 
 
 
 print "</table>";
-echo "<script>$('.grades').dataTable({"
+// Enable sorting.
+//echo "<script>$('#grades').dataTable({'aaSorting': []});</script>";
+
+
+echo "<script>$('#grades').dataTable({"
 . "aaSorting: [],"
-. "iDisplayLength:20,"
-. "aLengthMenu : [20,30],"    
-. "bJQueryUI : true"
+. "iDisplayLength:30,"
+. "aLengthMenu : [30,50,100]"    
         . "});"
         . "</script>";
 

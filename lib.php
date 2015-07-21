@@ -61,6 +61,7 @@ class report_btecprogress {
     private $maxcriteria;
     private $assigncriteria;
     private $criteriagrades;
+    public $groups;
     public $course;
     
 
@@ -75,12 +76,20 @@ class report_btecprogress {
         $this->assigncriteria = $this->get_all_criteria($courseid);
         $this->criteriagrades = $this->get_criteria_grades($courseid);
         $this->course=$this->get_course($courseid);
+        $this->groups=$this->get_group_list($courseid);
     }
 
-    public function get_course($courseid){
+  public function get_course($courseid){
         global $DB;
         $sql="select * from course where id =?";
         return $DB->get_record('course',array('id'=>$courseid));        
+    }
+    
+    public function get_group_list($courseid){
+        global $DB;
+        //$sql="select id,name from groups where courseid=?";
+        $records=$DB->get_records_menu('groups',array('courseid'=>$courseid),'','id,name');
+        return $records;
     }
     
     public function get_students($courseid) {
@@ -420,7 +429,7 @@ class usergrade {
     public function addgrade($grade, $maxgrade) {
         $this->grades[]['grade'] = $grade;
         $this->grades[]['maxgrade'] = $maxgrade;
-        if ($grade < $maxgrade) {
+        if ($grade <= $maxgrade) {
             $this->modulegrade = $grade;
 
         }

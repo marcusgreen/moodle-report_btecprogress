@@ -542,6 +542,7 @@
 }
 
 
+.path-report-btecprogress table.dataTable tr td.sorting_1.pass { background-color:orange; }
 
 .path-report-btecprogress .pass{
     background-color:orange;    

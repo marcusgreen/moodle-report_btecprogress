@@ -92,14 +92,24 @@ class report_btecprogress {
         return $records;
     }
     
-    public function get_students($courseid) {
+    public function get_students($courseid,$groupid=null) {
         global $DB;
-        return $DB->get_records_sql('SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
+        $groupsql="";
+        if($groupid<>null){
+            $groupsql=" and gm.groupid=? ";
+        }
+        $sql='SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
         FROM {user} AS stu
         JOIN {user_enrolments} ue ON ue.userid = stu.id
         JOIN {enrol} enr ON ue.enrolid = enr.id
-        WHERE enr.courseid = ?
-        ORDER BY lastname ASC, firstname ASC, userid ASC', array($courseid));
+        JOIN {groups_members} gm ON gm.userid=stu.id
+        WHERE enr.courseid=?'.
+        $groupsql
+        .'ORDER BY lastname ASC, firstname ASC, userid ASC'; 
+        $params=array($courseid,$groupid);
+        $records= $DB->get_records_sql($sql,$params);
+        return $records;
+        
     }
 
     public function get_submission_status($courseid) {

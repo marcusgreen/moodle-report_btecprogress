@@ -25,11 +25,11 @@
 
 require(dirname(__FILE__).'/../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-
-
 global $PAGE, $COURSE, $DB, $CFG;
 
 $courseid = required_param('id', PARAM_INT);
+$groupid = optional_param('group',null,PARAM_INT);
+
 
 // Check permissions
 require_login($courseid);
@@ -37,36 +37,45 @@ $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('dataTables', 'report_btecprogress');
 
 $PAGE->set_context(context_course::instance($COURSE->id));
-$PAGE->set_url('/report/btecprogress/index.php');
+$url = new moodle_url('/report/btecprogress/index.php');
+
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_title('btecprogress', 'report_btecprogress');
 echo $OUTPUT->header();
+$PAGE->navigation->add(get_string('pluginname', 'report_btecprogress'), $url);
+
 $report = new report_btecprogress();
 
 $report->init($courseid);
 
-
-
-$users=$report->get_students($courseid);
+$users=$report->get_students($courseid,$groupid);
 $assigns=$report->get_all_assigns($courseid);
-
-echo html_writer::select($report->groups, "group");
-
-
-
-echo "<br/><br/>";
-
- 
-
 print $report->course->fullname;
 
+echo "<br/>";
+    echo "<form action=\"$CFG->wwwroot/report/btecprogress/index.php \"method=\"get\">\n";
+    echo "<input type=hidden name=id value=".$courseid.">";
+	$selectbox = '<select name="group" onchange="this.form.submit()">';
+        $selectbox .='<option value=>Select</option>';
+        foreach($report->groups as $id=>$name){
+            $selected="";
+            if($id==$groupid){
+                $selected=" selected ";
+            }
+            $selectbox .='<option value='.$id.$selected.'>'.$name.'</option>';
+        }
+        $selectbox.='</select>';
+	
+echo $selectbox;
+echo '</form>';
 
-//$criteria=$report->get_assign_criteria($courseid);
+echo get_string('key','report_btecprogress');
+
 
 $maxcriteria=$report->get_max_criteria($courseid);
 
-//$assigncount=count($userassigns);
 $submissionstatus=$report->get_submission_status($courseid);
 
 

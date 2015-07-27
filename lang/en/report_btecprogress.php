@@ -25,5 +25,6 @@
 $string['pluginname'] = 'BTEC progress';
 $string['title'] = 'BTEC progress report';
 $string['progresstblheader']='progresstbleheader';
+$string['key']="Key: N=Not Submitted, A=Achieved,R=Referred";
 
 

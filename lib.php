@@ -16,17 +16,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * My Feedback Report.
+ * BTEC Progress report.
  *
  * @package   report_btecprogress
- * @author    Jessica Gramp <j.gramp@ucl.ac.uk>
- * @credits   Based on original work report_mygrades by David Bezemer <david.bezemer@uplearning.nl> which in turn is based on 
- * 			  block_btecprogress by Karen Holland, Mei Jin, Jiajia Chen. Also uses SQL originating from Richard Havinga 
- * 			  <richard.havinga@ulcc.ac.uk>. The code for using an external database is taken from Juan leyva's
- * 			  <http://www.twitter.com/jleyvadelgado> configurable reports block.
- *            The idea for this reporting tool originated with Dr Jason Davies <j.p.davies@ucl.ac.uk> and 
- *            Dr John Mitchell <j.mitchell@ucl.ac.uk>
+ * @author    Marcus Green
+ * @credits   Techniques used are strongly influenced by the My Feedback report by Jessica Gramp
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * 
  */
 defined('MOODLE_INTERNAL') || die;
 
@@ -123,8 +119,9 @@ where c.id=? and asb.status='submitted'";
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
-
+/*
     public function get_user_sub_status($user, $assign, $submissionstatus) {
+        return;
         $status = "N";
         foreach ($submissionstatus as $s) {
             if (($user->userid == $s->userid ) && ($assign->assignid == $s->assignid)) {
@@ -134,6 +131,8 @@ where c.id=? and asb.status='submitted'";
         }
         return $status;
     }
+ * */
+ 
 
     public function get_submissions($courseid) {
         global $DB;

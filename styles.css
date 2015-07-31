@@ -1,20 +1,16 @@
-
-
-
-/*
+ /*
  * Table
  */
  
 .path-report-btecprogress table.dataTable {
 	margin: 0 auto;
 	clear: both;
-	width: 100%;
-        border-collapse:inherit;    
+        border:1px solid black;
 }
 
 .path-report-btecprogress table.dataTable thead th {
 	padding: 3px 18px 3px 10px;
-	border-bottom: 1px solid black;
+	border: 1px solid black;
 	font-weight: bold;
 	cursor: pointer;
 	*cursor: hand;
@@ -23,12 +19,13 @@
 
 .path-report-btecprogress table.dataTable tfoot th {
 	padding: 3px 18px 3px 10px;
-	border-top: 1px solid black;
+	border: 1px solid black;
 	font-weight: bold;
 }
 
 .path-report-btecprogress table.dataTable td {
 	padding: 3px 10px;
+        border:solid black 1px;
 }
 
 .path-report-btecprogress table.dataTable td.center,
@@ -40,17 +37,6 @@
 	height: 12px; 
 	width: 12px;
 }
-
-.path-report-btecprogress table.dataTable tr.odd { background-color: #E2E4FF; }
-.path-report-btecprogress table.dataTable tr.even { background-color: white; }
-
-.path-report-btecprogress table.dataTable tr.odd td.sorting_1 { background-color: #D3D6FF; }
-.path-report-btecprogress table.dataTable tr.odd td.sorting_2 { background-color: #DADCFF; }
-.path-report-btecprogress table.dataTable tr.odd td.sorting_3 { background-color: #E0E2FF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_1 { background-color: #EAEBFF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_2 { background-color: #F2F3FF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
-
 /*
  * Table wrapper
  */
@@ -205,7 +191,7 @@
 
 .path-report-btecprogress table.dataTable thead th {
 	padding: 3px 18px 3px 10px;
-	border-bottom: 1px solid black;
+	border-bottom: 3px solid black;
 	font-weight: bold;
 	cursor: pointer;
 	*cursor: hand;
@@ -231,15 +217,8 @@
 	width: 12px;
 }
 
-.path-report-btecprogress table.dataTable tr.odd { background-color: #E2E4FF; }
-.path-report-btecprogress table.dataTable tr.even { background-color: white; }
 
-.path-report-btecprogress table.dataTable tr.odd td.sorting_1 { background-color: #D3D6FF; }
-.path-report-btecprogress table.dataTable tr.odd td.sorting_2 { background-color: #DADCFF; }
-.path-report-btecprogress table.dataTable tr.odd td.sorting_3 { background-color: #E0E2FF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_1 { background-color: #EAEBFF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_2 { background-color: #F2F3FF; }
-.path-report-btecprogress table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
+
 /*
  * Table wrapper
  */
@@ -431,23 +410,19 @@
 .path-report-btecprogress table.grades tr {
 	text-align: left;
 	padding-left:10px;
+        border:solid 1px black;
 }
 .path-report-btecprogress table.grades td:first-child {
 	text-align: left;
 	padding-left:5px;
 	border-left: 0;
 }
-.path-report-btecprogress table.grades td, .path-report-btecprogress table.dataTable tr.odd {
-	padding:5px;
-	border-top: 1px solid #ffffff;
-	border-bottom:1px solid #e0e0e0;
-	border-left: 1px solid #e0e0e0;
-	min-width: 80px;
-	background: #fafafa !important;
-}
+
+/*
 .path-report-btecprogress table.grades tr.even td, .path-report-btecprogress table.dataTable tr.even {
 	background: #f6f6f6 !important;
 }
+*/
 .path-report-btecprogress table.grades tr:last-child td {
 	border-bottom:0;
 }
@@ -498,17 +473,11 @@
 	padding-left:5px;
 	border-left: 0;
 }
-.path-report-btecprogress table.grades td, .path-report-btecprogress table.dataTable tr.odd {
-	padding:5px;
-	border-top: 1px solid #ffffff;
-	border-bottom:1px solid #e0e0e0;
-	border-left: 1px solid #e0e0e0;
-	min-width: 80px;
-	background: #f6f6f6 !important;
-}
+
 .path-report-btecprogress table.grades tr.even td, .path-report-btecprogress table.dataTable tr.even {
 	background: #E4E4E4 !important;
 }
+
 .path-report-btecprogress table.grades tr:last-child td {
 	border-bottom:0;
 }
@@ -539,6 +508,11 @@
 }
 .path-report-btecprogress .refer{
     background-color: #FF3300;
+}
+.path-report-btecprogress .newsub{
+    color:green;
+    font-weight:bold;
+    font-size:15pt;
 }
 
 

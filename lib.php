@@ -90,18 +90,20 @@ class report_btecprogress {
     
     public function get_students($courseid,$groupid=null) {
         global $DB;
-        $groupsql="";
+        $groupjoinsql="";
+        $groupandsql="";
         if($groupid<>null){
-            $groupsql=" and gm.groupid=? ";
+            $groupjoinsql= " JOIN {groups_members} gm ON gm.userid=stu.id";       
+            $groupandsql=" and gm.groupid=? ";
         }
         $sql='SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
         FROM {user} AS stu
         JOIN {user_enrolments} ue ON ue.userid = stu.id
-        JOIN {enrol} enr ON ue.enrolid = enr.id
-        JOIN {groups_members} gm ON gm.userid=stu.id
-        WHERE enr.courseid=?'.
-        $groupsql
-        .'ORDER BY lastname ASC, firstname ASC, userid ASC'; 
+        JOIN {enrol} enr ON ue.enrolid = enr.id'.
+        $groupjoinsql                
+        .' WHERE enr.courseid=?'.
+        $groupandsql
+        .' ORDER BY lastname ASC, firstname ASC, userid ASC'; 
         $params=array($courseid,$groupid);
         $records= $DB->get_records_sql($sql,$params);
         return $records;
@@ -119,24 +121,11 @@ where c.id=? and asb.status='submitted'";
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
-/*
-    public function get_user_sub_status($user, $assign, $submissionstatus) {
-        return;
-        $status = "N";
-        foreach ($submissionstatus as $s) {
-            if (($user->userid == $s->userid ) && ($assign->assignid == $s->assignid)) {
-                $status = "!";
-                return $status;
-            }
-        }
-        return $status;
-    }
- * */
- 
 
     public function get_submissions($courseid) {
         global $DB;
-        $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade from {assign_submission} as asub
+        $sql = "select asub.id as asubid,cm.id as coursemodid,a.id as assignid,c.shortname,u.id as userid,u.username,a.name,ag.grade
+from {assign_submission} as asub
 join {assign} as a on a.id =asub.assignment
 join {course_modules} as cm on cm.instance=a.id and cm.module=1
 join {grade_items} as gi on gi.iteminstance=cm.instance and gi.itemmodule='assign' 
@@ -153,12 +142,6 @@ order by asubid";
         return $records;
     }
 
-    public function get_user_submission($user, $submissions) {
-
-        foreach ($submissions as $submit) {
-            
-        }
-    }
 
     public function grade_style($overallgrade) {
         $style = "";
@@ -226,9 +209,9 @@ order by asubid";
     }
 
     public function check_submission($user, $assign) {
-        $sql="select asub.id,a.name from course_modules cm
-            join assign as a on a.id=cm.instance
-            join assign_submission as asub on asub.assignment=a.id
+        $sql="select asub.id,a.name from {course_modules} cm
+            join {assign} as a on a.id=cm.instance
+            join {assign_submission} as asub on asub.assignment=a.id
             and asub.userid=? and cm.id=?";
         global $DB;
         $records = $DB->get_records_sql($sql, array($user->userid,$assign->coursemodid));

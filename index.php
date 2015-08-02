@@ -61,23 +61,18 @@ $report->init($courseid);
 $users = $report->get_students($courseid, $groupid);
 $assigns = $report->get_all_assigns($courseid);
 print $report->course->fullname;
+$URL=$CFG->wwwroot.'/report/btecprogress/index.php';
 
-echo "<br/>";
-echo "<form action=\"$CFG->wwwroot/report/btecprogress/index.php \"method=\"get\">\n";
-echo "<input type=hidden name=id value=" . $courseid . ">";
-$selectbox = '<select name="group" onchange="this.form.submit()">';
-$selectbox .='<option value=>Select</option>';
 foreach ($report->groups as $id => $name) {
-    $selected = "";
-    if ($id == $groupid) {
-        $selected = " selected ";
-    }
-    $selectbox .='<option value=' . $id . $selected . '>' . $name . '</option>';
+    $groups[$URL.'?id='.$courseid.'&group='.$id]=$name;
 }
-$selectbox.='</select>';
-
-echo $selectbox;
-echo '</form>';
+$default=$URL.'?id='.$courseid;
+$select = new url_select($groups, null, array($default=>'Select'));
+if(isset($groupid)){
+    $select->selected=$URL.'?id='.$courseid.'&group='.$groupid;
+}
+$select->set_label('Group');
+echo $OUTPUT->render($select);
 
 echo get_string('key', 'report_btecprogress');
 
@@ -96,7 +91,7 @@ foreach ($assigns as $a) {
     print "<th>" . $a->assignment_name . "</th>";
     $criteria = $report->get_assign_criteria($a->coursemodid);
     foreach ($criteria as $c) {
-        print "<th>" . $c->shortname . "</th>";
+        print "<th class='criteria'>" . $c->shortname . "</th>";
     }
 }
 print "<th>Total</th></tr>";
@@ -154,11 +149,17 @@ foreach ($users as $user) {
 
 print "</table>";
 
+$noassigns= get_string('noassigns', 'report_btecprogress');
+
 echo "<script>$('#grades' ) .dataTable({"
+ ."oLanguage: { "
+ ."sEmptyTable:' $noassigns '"
+ ."},"
  . "aaSorting: [], "
  . "iDisplayLength:30, "
- . "aLengthMenu : [30, 50, 100]"
- . "});
-                    "
+ . "aLengthMenu : [30, 50, 100], "
+ . "});"
  . "</script>";
 echo $OUTPUT->footer();
+
+ 

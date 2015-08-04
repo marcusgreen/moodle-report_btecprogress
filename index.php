@@ -52,28 +52,25 @@ echo $OUTPUT->header();
  * 
  */
 
-
-
 $PAGE->navigation->add(get_string('pluginname', 'report_btecprogress'), $url);
-
 $report = new report_btecprogress();
 $report->init($courseid);
 $users = $report->get_students($courseid, $groupid);
 $assigns = $report->get_all_assigns($courseid);
 print $report->course->fullname;
-$URL=$CFG->wwwroot.'/report/btecprogress/index.php';
+$URL = $CFG->wwwroot . '/report/btecprogress/index.php';
 
 foreach ($report->groups as $id => $name) {
-    $groups[$URL.'?id='.$courseid.'&group='.$id]=$name;
+    $groups[$URL . '?id=' . $courseid . '&group=' . $id] = $name;
 }
-$default=$URL.'?id='.$courseid;
-$select = new url_select($groups, null, array($default=>'Select'));
-if(isset($groupid)){
-    $select->selected=$URL.'?id='.$courseid.'&group='.$groupid;
+$default = $URL . '?id=' . $courseid;
+$select = new url_select($groups, null, array($default => 'Select'));
+if (isset($groupid)) {
+    $select->selected = $URL . '?id=' . $courseid . '&group=' . $groupid;
 }
 $select->set_label('Group');
 echo $OUTPUT->render($select);
-
+/* explains what the letters in the cells mean, e.g. N for No submission */
 echo get_string('key', 'report_btecprogress');
 
 $maxcriteria = $report->get_max_criteria($courseid);
@@ -88,7 +85,12 @@ echo "<th>First Name</th>";
 echo "<th>Last Name</th>";
 $counter = 0;
 foreach ($assigns as $a) {
-    print "<th>" . $a->assignment_name . "</th>";
+    $assignment_name = $a->assignment_name;
+    if (strlen($assignment_name) > 15) {
+        $assignment_name = substr($assignment_name, 0, 15);
+        $assignment_name = $assignment_name . "...";
+    }
+    print "<th title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
     $criteria = $report->get_assign_criteria($a->coursemodid);
     foreach ($criteria as $c) {
         print "<th class='criteria'>" . $c->shortname . "</th>";
@@ -100,27 +102,25 @@ echo "</thead>";
 foreach ($users as $user) {
     print "<tr><td>" . $user->firstname . "</td>";
     print "<td>" . $user->lastname . "</td>";
-    $coursegrade = 4;
-    $overallgrade = 4;
     $ug = $report->get_all_usergrades($user, $assigns);
     foreach ($assigns as $a) {
         $criteria = $report->get_assign_criteria($a->coursemodid);
         $usergrade = $report->get_user_grade($user, $a);
-        $tag="<td>";
-        if($usergrade->grade=='R'){
-            $tag="<td class='refer'>";
-        }elseif($usergrade->grade=='P'){
-            $tag="<td class='achieved'>";
+        $tag = "<td>";
+        if ($usergrade->grade == 'R') {
+            $tag = "<td class='refer'>";
+        } elseif ($usergrade->grade == 'P') {
+            $tag = "<td class='achieved'>";
         }
 
-        $textclass="";
-        if($usergrade->grade=='!'){
-            $textclass='newsub';
+        $textclass = "";
+        if ($usergrade->grade == '!') {
+            $textclass = 'newsub';
         }
         $link = "<a href=../../mod/assign/view.php?id=" . $a->coursemodid . "&rownum=0&action=grade class='$textclass'>";
-      
-        print $tag.$link . $usergrade->grade . "</a></td>";
-        
+
+        print $tag . $link . $usergrade->grade . "</a></td>";
+
         foreach ($criteria as $c) {
             $g = $report->get_user_criteria_grades($user->userid, $a->coursemodid, $c->criteriaid);
             if ($g == 'A') {
@@ -130,7 +130,6 @@ foreach ($users as $user) {
             } else {
                 $tag = '<td>';
             }
-
             print $tag;
             print $g;
             print '</td>';
@@ -145,21 +144,16 @@ foreach ($users as $user) {
     echo "</td>";
     print "</tr>";
 }
-
-
 print "</table>";
 
-$noassigns= get_string('noassigns', 'report_btecprogress');
-
+$noassigns = get_string('noassigns', 'report_btecprogress');
 echo "<script>$('#grades' ) .dataTable({"
- ."oLanguage: { "
- ."sEmptyTable:' $noassigns '"
- ."},"
+ . "oLanguage: { "
+ . "sEmptyTable:' $noassigns '"
+ . "},"
  . "aaSorting: [], "
  . "iDisplayLength:30, "
  . "aLengthMenu : [30, 50, 100], "
  . "});"
  . "</script>";
 echo $OUTPUT->footer();
-
- 

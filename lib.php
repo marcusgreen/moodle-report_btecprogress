@@ -59,7 +59,6 @@ class report_btecprogress {
     private $criteriagrades;
     public $groups;
     public $course;
-    
 
     /**
      * Initialises the report and sets the title
@@ -71,43 +70,41 @@ class report_btecprogress {
         $this->maxcriteria = $this->get_max_criteria($courseid);
         $this->assigncriteria = $this->get_all_criteria($courseid);
         $this->criteriagrades = $this->get_criteria_grades($courseid);
-        $this->course=$this->get_course($courseid);
-        $this->groups=$this->get_group_list($courseid);
+        $this->course = $this->get_course($courseid);
+        $this->groups = $this->get_group_list($courseid);
     }
 
-  public function get_course($courseid){
+    public function get_course($courseid) {
         global $DB;
-        $sql="select * from course where id =?";
-        return $DB->get_record('course',array('id'=>$courseid));        
+        $sql = "select * from course where id =?";
+        return $DB->get_record('course', array('id' => $courseid));
     }
-    
-    public function get_group_list($courseid){
+
+    public function get_group_list($courseid) {
         global $DB;
-        //$sql="select id,name from groups where courseid=?";
-        $records=$DB->get_records_menu('groups',array('courseid'=>$courseid),'','id,name');
+        $records = $DB->get_records_menu('groups', array('courseid' => $courseid), '', 'id,name');
         return $records;
     }
-    
-    public function get_students($courseid,$groupid=null) {
+
+    public function get_students($courseid, $groupid = null) {
         global $DB;
-        $groupjoinsql="";
-        $groupandsql="";
-        if($groupid<>null){
-            $groupjoinsql= " JOIN {groups_members} gm ON gm.userid=stu.id";       
-            $groupandsql=" and gm.groupid=? ";
+        $groupjoinsql = "";
+        $groupandsql = "";
+        if ($groupid <> null) {
+            $groupjoinsql = " JOIN {groups_members} gm ON gm.userid=stu.id";
+            $groupandsql = " and gm.groupid=? ";
         }
-        $sql='SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
+        $sql = 'SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student
         FROM {user} AS stu
         JOIN {user_enrolments} ue ON ue.userid = stu.id
-        JOIN {enrol} enr ON ue.enrolid = enr.id'.
-        $groupjoinsql                
-        .' WHERE enr.courseid=?'.
-        $groupandsql
-        .' ORDER BY lastname ASC, firstname ASC, userid ASC'; 
-        $params=array($courseid,$groupid);
-        $records= $DB->get_records_sql($sql,$params);
+        JOIN {enrol} enr ON ue.enrolid = enr.id' .
+                $groupjoinsql
+                . ' WHERE enr.courseid=?' .
+                $groupandsql
+                . ' ORDER BY lastname ASC, firstname ASC, userid ASC';
+        $params = array($courseid, $groupid);
+        $records = $DB->get_records_sql($sql, $params);
         return $records;
-        
     }
 
     public function get_submission_status($courseid) {
@@ -137,11 +134,12 @@ where asub.status='submitted'
 and s.name='BTEC'
 and c.id=?
 order by asubid";
-  
+
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
 
+    /* return the name of the CSS style to match the grade letter */
 
     public function grade_style($overallgrade) {
         $style = "";
@@ -209,15 +207,15 @@ order by asubid";
     }
 
     public function check_submission($user, $assign) {
-        $sql="select asub.id,a.name from {course_modules} cm
+        $sql = "select asub.id,a.name from {course_modules} cm
             join {assign} as a on a.id=cm.instance
             join {assign_submission} as asub on asub.assignment=a.id
             and asub.userid=? and cm.id=?";
         global $DB;
-        $records = $DB->get_records_sql($sql, array($user->userid,$assign->coursemodid));
-        if(count($records)>0){
+        $records = $DB->get_records_sql($sql, array($user->userid, $assign->coursemodid));
+        if (count($records) > 0) {
             return "!";
-        }else{
+        } else {
             return "N";
         }
     }
@@ -345,18 +343,20 @@ and gd.method='btec'";
         }
         return $num;
     }
-
+    /* What is the highest grade you can get for the course, i.e. P,M or D. Does
+     * this make sense as you should be able to get an overal D on a course for 
+     * it to make sense.
+     * gbcin is grading btec criteria inner, gbcout is grading btec criteria outer 
+    shortname is the grade, i.e. P1, M2 etc     */
     public function get_max_criteria($courseid) {
-
         $sql = "select a.id,cm.id as cmid,a.name,shortname from  {gradingform_btec_criteria} as gbcout 
-join  {grading_definitions} gdef on gdef.id=gbcout.definitionid 
-join  {grading_areas} ga on ga.id=gdef.areaid 
-join  {context} con on con.id=ga.contextid 
-join  {course_modules} cm on cm.id=con.instanceid 
-join  {assign} a on a.id=cm.instance
-where shortname=(select min(shortname)from  {gradingform_btec_criteria} as gbcin 
-where gbcin.definitionid=gbcout.definitionid)";
-
+        join  {grading_definitions} gdef on gdef.id=gbcout.definitionid 
+        join  {grading_areas} ga on ga.id=gdef.areaid 
+        join  {context} con on con.id=ga.contextid 
+        join  {course_modules} cm on cm.id=con.instanceid 
+        join  {assign} a on a.id=cm.instance
+        where shortname=(select min(shortname)from  {gradingform_btec_criteria} as gbcin 
+        where gbcin.definitionid=gbcout.definitionid)";
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
@@ -423,7 +423,6 @@ class usergrade {
         $this->grades[]['maxgrade'] = $maxgrade;
         if ($grade <= $maxgrade) {
             $this->modulegrade = $grade;
-
         }
     }
 

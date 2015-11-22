@@ -26,6 +26,8 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
+require_once($CFG->dirroot . '/mod/assign/locallib.php');
+require_once($CFG->dirroot . '/mod/assign/gradingtable.php');
 /**
  * This function extends the navigation with the report items.
  *
@@ -76,7 +78,7 @@ class report_btecprogress {
 
     public function get_course($courseid) {
         global $DB;
-        $sql = "select * from course where id =?";
+        //$sql = "select * from course where id =?";
         return $DB->get_record('course', array('id' => $courseid));
     }
 
@@ -104,6 +106,14 @@ class report_btecprogress {
                 . ' ORDER BY lastname ASC, firstname ASC, userid ASC';
         $params = array($courseid, $groupid);
         $records = $DB->get_records_sql($sql, $params);
+        /*
+         * 
+         SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student FROM user AS stu JOIN user_enrolments ue ON ue.userid = stu.id JOIN enrol enr ON ue.enrolid = enr.id 
+join enrol en on en.enrol=ue.id
+WHERE enr.courseid=2 and
+ en.roleid=1 
+         * 
+         */
         return $records;
     }
 
@@ -254,7 +264,7 @@ join {modules} m on m.id=cm.module
 join {assign} a on a.id=cm.instance
 join {course} crs on crs.id=cm.course
 where s.NAME='BTEC' and m.name='assign' and crs.id=?
-and activemethod='btec'";
+and ga.activemethod='btec'";
 
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
@@ -410,6 +420,27 @@ and gd.method='btec'";
 
 }
 
+/**
+ * Find the rownum for a userid and assign mod to user for grading url
+ *
+ * @param stdClass $cm course module object
+ * @param in $userid the id of the user whose rownum we are interested in
+ *
+ * @return int
+  */
+
+function get_assign_rownum($cmid,$userid){
+    global $DB;
+    global $COURSE;
+    $cm=$DB->get_record('course_modules', array('id' => $cmid));
+    $mod_context = context_module::instance($cm->id);
+    $assign = new assign($mod_context,$cm,$COURSE);
+    $filter = get_user_preferences('assign_filter', '');
+    $table = new assign_grading_table($assign, 0, $filter, 0, false);
+    $useridlist = $table->get_column_data('userid');
+    $rownum = array_search($userid, $useridlist);
+    return $rownum;
+}
 class usergrade {
 
     public $grade = "N";

@@ -25,6 +25,8 @@
  */
 require(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
+
+
 global $PAGE, $COURSE, $DB, $CFG;
 
 $courseid = required_param('id', PARAM_INT);
@@ -32,6 +34,8 @@ $groupid = optional_param('group', null, PARAM_INT);
 
 // Check permissions
 require_login($courseid);
+$PAGE->set_pagelayout('report');
+
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('dataTables', 'report_btecprogress');
 
@@ -39,7 +43,6 @@ $PAGE->set_context(context_course::instance($COURSE->id));
 $url = new moodle_url('/report/btecprogress/index.php');
 
 $PAGE->set_url($url);
-$PAGE->set_pagelayout('report');
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_title('btecprogress', 'report_btecprogress');
 echo $OUTPUT->header();
@@ -56,15 +59,19 @@ $PAGE->navigation->add(get_string('pluginname', 'report_btecprogress'), $url);
 $report = new report_btecprogress();
 $report->init($courseid);
 $users = $report->get_students($courseid, $groupid);
+
 $assigns = $report->get_all_assigns($courseid);
+
+
 print $report->course->fullname;
 $URL = $CFG->wwwroot . '/report/btecprogress/index.php';
+
 
 foreach ($report->groups as $id => $name) {
     $groups[$URL . '?id=' . $courseid . '&group=' . $id] = $name;
 }
 $default = $URL . '?id=' . $courseid;
-$select = new url_select($groups, null, array($default => 'Select'));
+$select = new url_select($report->groups, null, array($default => 'Select'));
 if (isset($groupid)) {
     $select->selected = $URL . '?id=' . $courseid . '&group=' . $groupid;
 }
@@ -76,6 +83,7 @@ echo get_string('key', 'report_btecprogress');
 $maxcriteria = $report->get_max_criteria($courseid);
 
 $submissionstatus = $report->get_submission_status($courseid);
+
 
 
 print "<table id='grades'>";
@@ -117,7 +125,8 @@ foreach ($users as $user) {
         if ($usergrade->grade == '!') {
             $textclass = 'newsub';
         }
-        $link = "<a href=../../mod/assign/view.php?id=" . $a->coursemodid . "&rownum=0&action=grade class='$textclass'>";
+        $rownum = get_assign_rownum($a->coursemodid, $user->userid);
+        $link = "<a href=../../mod/assign/view.php?id=" . $a->coursemodid . "&rownum=" . $rownum . "&action=grade class='$textclass'>";
 
         print $tag . $link . $usergrade->grade . "</a></td>";
 

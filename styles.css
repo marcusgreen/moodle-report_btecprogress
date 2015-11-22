@@ -10,17 +10,21 @@
 
 .path-report-btecprogress table.dataTable thead th {
 	padding: 3px 18px 3px 10px;
+        padding: 0px 3px 0px 3px;
 	border: 1px solid black;
+        border-top:1px solid black;
 	font-weight: bold;
 	cursor: pointer;
 	*cursor: hand;
         background-color: #ddd;
+
 }
 
 .path-report-btecprogress table.dataTable tfoot th {
-	padding: 3px 18px 3px 10px;
-	border: 1px solid black;
+	/*padding: 3px 18px 3px 10px;*/
+	border: 0px solid black;
 	font-weight: bold;
+
 }
 
 .path-report-btecprogress table.dataTable td {
@@ -187,10 +191,11 @@
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+        float:left;
 }
 
 .path-report-btecprogress table.dataTable thead th {
-	padding: 3px 18px 3px 10px;
+	/*padding: 3px 18px 3px 10px;*/
 	border-bottom: 3px solid black;
 	font-weight: bold;
 	cursor: pointer;
@@ -198,7 +203,7 @@
 }
 
 .path-report-btecprogress table.dataTable tfoot th {
-	padding: 3px 18px 3px 10px;
+	/*padding: 3px 18px 3px 10px;*/
 	border-top: 1px solid black;
 	font-weight: bold;
 }
@@ -226,6 +231,7 @@
 	position: relative;
 	clear: both;
 	*zoom: 1;
+        width:140%;
 }
 
 
@@ -315,7 +321,7 @@
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button,
 .path-report-btecprogress .paging_full_numbers a.paginate_active {
-	border: 1px solid #aaa;
+	bo1rder: 1px solid #aaa;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -410,7 +416,7 @@
 .path-report-btecprogress table.grades tr {
 	text-align: left;
 	padding-left:10px;
-        border:solid 1px black;
+        border:solid 0px black;
 }
 .path-report-btecprogress table.grades td:first-child {
 	text-align: left;
@@ -452,8 +458,8 @@
 
 .path-report-btecprogress table.grades th {
 	padding:8px 10px 8px 10px;
-	border-top:1px solid #fafafa;
-	border-bottom:1px solid #e0e0e0;
+	border-top:0px solid #fafafa;
+	border-bottom:0px solid #e0e0e0;
 	background: #ededed;
 }
 
@@ -479,7 +485,7 @@
 }
 
 .path-report-btecprogress table.grades tr:last-child td {
-	border-bottom:0;
+	/*border-bottom:0;*/
 }
 .path-report-btecprogress table.grades tr:hover td {
 	background: #f2f2f2 !important;
@@ -509,6 +515,11 @@
 .path-report-btecprogress .refer{
     background-color: #FF3300;
 }
+
+.path-report-btecprogress .criteria{
+    padding:0px 3px 0px 3px;
+}
+
 .path-report-btecprogress .newsub{
     color:green;
     font-weight:bold;

@@ -61,6 +61,7 @@ class report_btecprogress {
     private $criteriagrades;
     public $groups;
     public $course;
+    public $emptytable_message;
 
     /**
      * Initialises the report and sets the title
@@ -106,14 +107,9 @@ class report_btecprogress {
                 . ' ORDER BY lastname ASC, firstname ASC, userid ASC';
         $params = array($courseid, $groupid);
         $records = $DB->get_records_sql($sql, $params);
-        /*
-         * 
-         SELECT stu.id AS userid, stu.idnumber AS idnumber, stu.firstname, stu.lastname, stu.username AS student FROM user AS stu JOIN user_enrolments ue ON ue.userid = stu.id JOIN enrol enr ON ue.enrolid = enr.id 
-join enrol en on en.enrol=ue.id
-WHERE enr.courseid=2 and
- en.roleid=1 
-         * 
-         */
+        if(count($records)<1){
+            $this->emptytable_message=get_string('nousers','report_btecprogress');
+        }
         return $records;
     }
 
@@ -149,8 +145,9 @@ order by asubid";
         return $records;
     }
 
-    /* return the name of the CSS style to match the grade letter */
-
+    /** 
+     * return the name of the CSS style to match the grade letter 
+     */
     public function grade_style($overallgrade) {
         $style = "";
         switch ($overallgrade) {
@@ -268,6 +265,9 @@ and ga.activemethod='btec'";
 
         global $DB;
         $records = $DB->get_records_sql($sql, array($courseid));
+          if(count($records)<1){
+            $this->emptytable_message=get_string('noassigns','report_btecprogress');
+        }
         return $records;
     }
 
@@ -296,7 +296,6 @@ and gd.method='btec'";
         foreach ($this->criteriagrades as $c) {
             if (($c->userid == $userid) && ($c->coursemodid == $coursemodid) && ($c->criteriaid == $criteriaid)) {
                 return $this->critera_num_to_letter($c->score);
-                //return $c->score;
             }
         }
     }
@@ -322,9 +321,10 @@ and gd.method='btec'";
         }
         return $criteria;
     }
+    
 
     public function get_all_criteria($courseid) {
-        $sql = "select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname from {assign} as a 
+        $sql = "select gbc.id as criteriaid,a.id as assignid,cm.id as coursemodid,a.name,gbc.shortname,gbc.description from {assign} as a 
               join {course_modules} as cm on cm.instance=a.id 
               join {context} as ctx on ctx.instanceid=cm.id 
               join {grading_areas} as ga on ga.contextid=ctx.id 
@@ -393,6 +393,37 @@ and gd.method='btec'";
         $records = $DB->get_records_sql($sql, array($courseid));
         return $records;
     }
+    
+ public function get_key(){
+     $key="<div class='keylabel key'>".get_string('key','report_btecprogress')."</div>";
+     $key .="<div class='nosubmission key'>".get_string('nosubmission','report_btecprogress')."</div>";
+     $key.="<div class='newsubmission key '>".get_string('newsubmission','report_btecprogress')."</div>";
+     $key.="<div class='achieved key '>".get_string('achieved','report_btecprogress')."</div>";
+     $key.="<div class='referred key '>".get_string('referred','report_btecprogress')."</div>";
+
+     return $key;
+     
+ }   
+ public function get_table_script($message){
+ echo "<script>$('#grades' ) .dataTable({
+   dom: 'Bfltpi',
+    buttons: [
+        'copy',
+        'csv',
+    ],
+ oLanguage: { 
+ sEmptyTable:' $message '
+ },
+ 'pagingType': 'full_numbers',
+ aaSorting: [], 
+ iDisplayLength:30, 
+ aLengthMenu : [30, 50, 100],   
+ 'bAutoWidth': false
+ });
+</script>"; 
+
+}
+ 
 
     /**
      * Gets whether or not the module is installed and visible
@@ -428,6 +459,8 @@ and gd.method='btec'";
  *
  * @return int
   */
+
+
 
 function get_assign_rownum($cmid,$userid){
     global $DB;

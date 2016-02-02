@@ -25,7 +25,19 @@
 $string['pluginname'] = 'BTEC progress';
 $string['title'] = 'BTEC progress report';
 $string['progresstblheader']='progresstbleheader';
-$string['key']="Key:!= New Submission,N=Not Submitted, A=Achieved,R=Referred";
+$string['key']="Key: ";
 $string['noassigns']='No assignments found, does the course contain BTEC graded assignments?';
+$string['nousers']='No users in group or on course?';
+$string['firstname']='First Name';
+$string['lastname']='Last Name';
+$string['newsubmission']='!=New Submission';
+$string['nosubmission']='N=Not Submitted';
+$string['achieved']='A=Achieved';
+$string['referred']='R=Referred';
+
+
+
+
+
 
 

@@ -2,10 +2,35 @@
  * Table
  */
  
+ .keycontainer{
+   margin-bottom:6px;   
+   -webkit-border-radius: 1px;   -moz-border-radius: 1px;
+   border-radius: 2px; 
+   border:solid black thin;
+   display:inline-block;
+   box-shadow: 1px 1px 1px 1px #000;
+   
+}
+.path-report-btecprogress .key{
+    display:inline-block;
+    padding-left:2px;
+    padding-right:2px;
+}
+
+ .path-report-btecprogress .keylabel{
+        background-image: linear-gradient(white,lightgray);
+ }
+ 
 .path-report-btecprogress table.dataTable {
 	margin: 0 auto;
 	clear: both;
         border:1px solid black;
+}
+
+.path-report-btecprogress table.firstname {
+    background-color:red;
+    width:10px;
+    
 }
 
 .path-report-btecprogress table.dataTable thead th {
@@ -231,7 +256,6 @@
 	position: relative;
 	clear: both;
 	*zoom: 1;
-        width:140%;
 }
 
 
@@ -497,7 +521,7 @@
     background-color:lightgreen;
 }
 
-.path-report-btecprogress  table.dataTable td.sorting_1 notmet{
+.path-report-btecprogress  table.dataTable td.sorting_1 xnosubmission{
     background-color:red;
 }
 
@@ -507,10 +531,24 @@
 
 
 .path-report-btecprogress .achieved{
-    background-color:lightgreen;
+    background-image: linear-gradient(white, lightgreen);
+
+}
+
+.path-report-btecprogress .nosubmission{
+    background-image: linear-gradient(white, pink);
+
+}
+
+.path-report-btecprogress .newsubmission{
+    background-image: linear-gradient(white, lightblue);
 }
 .path-report-btecprogress .notmet{
     background-color: #FF3300;
+}
+
+.path-report-btecprogress  .referred{
+    background-image: linear-gradient(white, red);
 }
 .path-report-btecprogress .refer{
     background-color: #FF3300;
@@ -520,11 +558,6 @@
     padding:0px 3px 0px 3px;
 }
 
-.path-report-btecprogress .newsub{
-    color:green;
-    font-weight:bold;
-    font-size:15pt;
-}
 
 
 .path-report-btecprogress table.dataTable tr td.sorting_1.pass { background-color:orange; }

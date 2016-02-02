@@ -25,5 +25,10 @@
  */
 
 $plugins = array(
+    'buttons_foundation'        => array('files'=>array('Buttons-1.1.0/js/buttons.foundation.js')),
     'dataTables'     => array('files' => array('dataTables.js')),
-);
+    'buttons_css'    => array('files'=>array('Buttons-1.1.0/css/buttons.dataTables.css')),
+    'buttons_js'     => array('files'=>array('Buttons-1.1.0/js/dataTables.buttons.js')),
+    'html5_js'       => array('files'=>array('Buttons-1.1.0/js/buttons.html5.js')),
+    'jquery_ui'      => array('files'=>array('Buttons-1.1.0/js/buttons.jqueryui.js')
+   ));

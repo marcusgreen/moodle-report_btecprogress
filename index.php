@@ -66,7 +66,7 @@ $url = new moodle_url('/report/btecprogress/index.php');
 $PAGE->set_url($url);
 $PAGE->set_heading($COURSE->fullname);
 $PAGE->set_title('btecprogress', 'report_btecprogress');
-echo $OUTPUT->header();
+$html= $OUTPUT->header();
 
 $PAGE->navigation->add(get_string('pluginname', 'report_btecprogress'), $url);
 $report = new report_btecprogress();
@@ -78,7 +78,8 @@ $report->init($courseid);
 $users = $report->get_students($courseid, $groupid);
 $assigns = $report->get_all_assigns($courseid);
 
-print "<div class='coursename'>Course: ".$report->course->fullname."</div>";
+$html.= "<div class='coursename'>Course: ".$report->course->fullname."</div>";
+
 $URL = $CFG->wwwroot . '/report/btecprogress/index.php';
 
 foreach ($report->groups as $id => $name) {
@@ -94,19 +95,19 @@ if (isset($groupid)) {
 
 $select->set_label('Group');
 
-echo $OUTPUT->render($select);  
+$html.= $OUTPUT->render($select);  
 
 /* explains what the letters in the cells mean, e.g. N for No submission */
-echo "<div class='keycontainer'>".$report->get_key()."</div>";
+$html.="<div class='keycontainer'>".$report->get_key()."</div>";
 
 $maxcriteria = $report->get_max_criteria($courseid);
 $submissionstatus = $report->get_submission_status($courseid);
-print "<div class='gradecontainer'>";
-print "<table id='grades'>";
-echo "<thead>";
-echo "<tr class='headerrow'>";
-echo "<th>".get_string('firstname', 'report_btecprogress')."</th>";
-echo "<th>".get_string('lastname', 'report_btecprogress')."</th>";
+$html.= "<div class='gradecontainer'>";
+$html.= "<table id='grades'>";
+$html.= "<thead>";
+$html.="<th>".get_string('firstname', 'report_btecprogress')."</th>";
+$html.= "<th>".get_string('lastname', 'report_btecprogress')."</th>";
+
 $assigncount = 0;
 foreach ($assigns as $a) {
     $assigncount++;
@@ -115,18 +116,19 @@ foreach ($assigns as $a) {
         $assignment_name = substr($assignment_name, 0, 15);
         $assignment_name = $assignment_name . "...";
     }
-    print "<th class='assignment' title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
+    $html.= "<th class='assignment' title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
     $criteria = $report->get_assign_criteria($a->coursemodid);
     foreach ($criteria as $c) {
-        print "<th class='criteria grade' title='$c->description'>" . $c->shortname . "</th>";
+        $html.= "<th class='criteria grade' title='$c->description'>" . $c->shortname . "</th>";
     }
 }
-print "<th class='total'>Total</th></tr>";
-echo "</thead>";
+$html.= "<th class='total'>Total</th></tr>";
+
+$html.= "</thead>";
 if ($assigncount > 0) {
     foreach ($users as $user) {
-        print "<tr><td>" . $user->firstname . "</td>";
-        print "<td>" . $user->lastname . "</td>";
+        $html.= "<tr><td>" . $user->firstname . "</td>";
+        $html.= "<td>" . $user->lastname . "</td>";
         $ug = $report->get_all_usergrades($user, $assigns);
         foreach ($assigns as $a) {
             $criteria = $report->get_assign_criteria($a->coursemodid);
@@ -148,9 +150,9 @@ if ($assigncount > 0) {
             $link = "<a href=../../mod/assign/view.php?id=" . $a->coursemodid . "&rownum=" . $rownum . "&action=grade class='$textclass'>";
   
             if($usergrade->grade=="N"){
-                print $tag . $usergrade->grade . "</a></td>";
+                $html.=$tag . $usergrade->grade . "</a></td>";
             }else{
-                print $tag . $link . $usergrade->grade . "</a></td>";
+               $html.= $tag . $link . $usergrade->grade . "</a></td>";
             }
 
             foreach ($criteria as $c) {
@@ -162,23 +164,24 @@ if ($assigncount > 0) {
                 } else {
                     $tag = '<td>';
                 }
-                print $tag;
-                print $g;
-                print '</td>';
+                $html.= $tag;
+                $html.= $g;
+                $html.= '</td>';
             }
         }
 
         /* calculated grade for all assignments */
         $overallgrade = $report->num_to_letter($ug->modulegrade);
         $tag = '<td class=' . $report->grade_style($overallgrade) . '>';
-        print $tag;
-        print $overallgrade;
-        echo "</td>";
-        print "</tr>";
+        $html.= $tag;
+        $html.= $overallgrade;
+        $html.= "</td>";
+        $html.= "</tr>";
     }
 }
-print "</table>";
-print "</div>";
+$html.="</table>";
+$html.="</div>";
+print $html;
 
 $report->get_table_script($report->emptytable_message);
 echo $OUTPUT->footer();

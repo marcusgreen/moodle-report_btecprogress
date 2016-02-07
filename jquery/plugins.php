@@ -30,5 +30,6 @@ $plugins = array(
     'buttons_css'    => array('files'=>array('Buttons-1.1.0/css/buttons.dataTables.css')),
     'buttons_js'     => array('files'=>array('Buttons-1.1.0/js/dataTables.buttons.js')),
     'html5_js'       => array('files'=>array('Buttons-1.1.0/js/buttons.html5.js')),
-    'jquery_ui'      => array('files'=>array('Buttons-1.1.0/js/buttons.jqueryui.js')
-   ));
+    'jquery_ui'      => array('files'=>array('Buttons-1.1.0/js/buttons.jqueryui.js')),
+    'fixedcolumns'   => array('files'=>array('FixedColumns-3.2.0/js/dataTables.fixedColumns.js'))
+   );

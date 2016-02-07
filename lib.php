@@ -414,12 +414,24 @@ and gd.method='btec'";
  oLanguage: { 
  sEmptyTable:' $message '
  },
- 'pagingType': 'full_numbers',
+ pagingType: 'full_numbers',
  aaSorting: [], 
- iDisplayLength:30, 
- aLengthMenu : [30, 50, 100],   
- 'bAutoWidth': false
- });
+ iDisplayLength:12, 
+ aLengthMenu : [12, 50, 100],   
+ autoWidth: false,
+ fixedColumns: {
+        leftColumns: 2
+ },
+ scrollCollapse:true,
+ scrollX:true,
+
+ columnDefs: [
+        { 'targets': [0,1], 'width': '8%'},
+        { 'targets': 'assignment','width': '8%' },
+        { 'targets': 'grade','width': '2%' },
+        { 'targets': 'total','width': '5%' }
+       ]
+});
 </script>"; 
 
 }

@@ -31,17 +31,33 @@ global $PAGE, $COURSE, $DB, $CFG;
 
 $courseid = required_param('id', PARAM_INT);
 $groupid = optional_param('group', null, PARAM_INT);
+$zoom = optional_param('zoom',null,PARAM_INT);
 
 // Check permissions
 require_login($courseid);
+/* 
+ * report
+ * course
+ * standard
+ * base
+ * 
+ * 
+ */
+//if($zoom==true){
+//$PAGE->set_pagelayout('base');
+//}else{
 $PAGE->set_pagelayout('report');
+//}
 
 $PAGE->requires->jquery();
 $PAGE->requires->jquery_plugin('dataTables', 'report_btecprogress');
 $PAGE->requires->jquery_plugin('buttons_css', 'report_btecprogress');
 $PAGE->requires->jquery_plugin('buttons_js', 'report_btecprogress');
 $PAGE->requires->jquery_plugin('html5_js', 'report_btecprogress');
+$PAGE->requires->jquery_plugin('fixedcolumns', 'report_btecprogress');
+
 $PAGE->requires->jquery_plugin('buttons_foundation', 'report_btecprogress');
+
 
 
 $PAGE->set_context(context_course::instance($COURSE->id));
@@ -54,12 +70,15 @@ echo $OUTPUT->header();
 
 $PAGE->navigation->add(get_string('pluginname', 'report_btecprogress'), $url);
 $report = new report_btecprogress();
+
 $report->init($courseid);
+
+
 
 $users = $report->get_students($courseid, $groupid);
 $assigns = $report->get_all_assigns($courseid);
 
-print $report->course->fullname;
+print "<div class='coursename'>Course: ".$report->course->fullname."</div>";
 $URL = $CFG->wwwroot . '/report/btecprogress/index.php';
 
 foreach ($report->groups as $id => $name) {
@@ -75,19 +94,19 @@ if (isset($groupid)) {
 
 $select->set_label('Group');
 
-echo $OUTPUT->render($select);
+echo $OUTPUT->render($select);  
 
 /* explains what the letters in the cells mean, e.g. N for No submission */
 echo "<div class='keycontainer'>".$report->get_key()."</div>";
 
 $maxcriteria = $report->get_max_criteria($courseid);
 $submissionstatus = $report->get_submission_status($courseid);
-
+print "<div class='gradecontainer'>";
 print "<table id='grades'>";
 echo "<thead>";
-echo "<tr>";
-echo "<th>First Name</th>";
-echo "<th>Last Name</th>";
+echo "<tr class='headerrow'>";
+echo "<th>".get_string('firstname', 'report_btecprogress')."</th>";
+echo "<th>".get_string('lastname', 'report_btecprogress')."</th>";
 $assigncount = 0;
 foreach ($assigns as $a) {
     $assigncount++;
@@ -96,13 +115,13 @@ foreach ($assigns as $a) {
         $assignment_name = substr($assignment_name, 0, 15);
         $assignment_name = $assignment_name . "...";
     }
-    print "<th title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
+    print "<th class='assignment' title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
     $criteria = $report->get_assign_criteria($a->coursemodid);
     foreach ($criteria as $c) {
-        print "<th class='criteria' title='$c->description'>" . $c->shortname . "</th>";
+        print "<th class='criteria grade' title='$c->description'>" . $c->shortname . "</th>";
     }
 }
-print "<th>Total</th></tr>";
+print "<th class='total'>Total</th></tr>";
 echo "</thead>";
 if ($assigncount > 0) {
     foreach ($users as $user) {
@@ -159,6 +178,7 @@ if ($assigncount > 0) {
     }
 }
 print "</table>";
+print "</div>";
 
 $report->get_table_script($report->emptytable_message);
 echo $OUTPUT->footer();

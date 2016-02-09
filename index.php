@@ -150,7 +150,7 @@ if ($assigncount > 0) {
             $link = "<a href=../../mod/assign/view.php?id=" . $a->coursemodid . "&rownum=" . $rownum . "&action=grade class='$textclass'>";
   
             if($usergrade->grade=="N"){
-                $html.=$tag . $usergrade->grade . "</a></td>";
+                $html.="<td class='nosubmission'>" . $usergrade->grade . "</a></td>";
             }else{
                $html.= $tag . $link . $usergrade->grade . "</a></td>";
             }

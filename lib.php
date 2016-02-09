@@ -424,7 +424,8 @@ and gd.method='btec'";
  },
  scrollCollapse:true,
  scrollX:true,
-
+ deferRender: true,
+ bProcessing: true,
  columnDefs: [
         { 'targets': [0,1], 'width': '8%'},
         { 'targets': 'assignment','width': '8%' },

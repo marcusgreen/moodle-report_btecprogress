@@ -82,6 +82,7 @@ $html.= "<div class='coursename'>Course: ".$report->course->fullname."</div>";
 
 $URL = $CFG->wwwroot . '/report/btecprogress/index.php';
 
+$groups = array();
 foreach ($report->groups as $id => $name) {
     $groups[$URL . '?id=' . $courseid . '&group=' . $id] = $name;
 }

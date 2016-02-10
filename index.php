@@ -120,7 +120,7 @@ foreach ($assigns as $a) {
     $html.= "<th class='assignment' title='" . $a->assignment_name . "'>" . $assignment_name . "</th>";
     $criteria = $report->get_assign_criteria($a->coursemodid);
     foreach ($criteria as $c) {
-        $html.= "<th class='criteria grade' title='$c->description'>" . $c->shortname . "</th>";
+        $html.= "<th class='criteria ' title='$c->description'>" . $c->shortname . "</th>";
     }
 }
 $html.= "<th class='total'>Total</th></tr>";
@@ -138,7 +138,11 @@ if ($assigncount > 0) {
             if ($usergrade->grade == 'R') {
                 $tag = "<td class='refer'>";
             } elseif ($usergrade->grade == 'P') {
-                $tag = "<td class='achieved'>";
+                $tag = "<td class='pass'>";
+            } elseif($usergrade->grade == 'M') {
+                $tag = "<td class='merit'>";
+            } elseif($usergrade->grade == 'D') {
+                $tag = "<td class='distinction'>";    
             } elseif($usergrade->grade=='!'){
                 $tag="<td class='newsubmission'>";
             }

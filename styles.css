@@ -1,12 +1,8 @@
 
-.path-report-btecprogress{
 
-}
  /*
  * Table
  */
- .gradecontainer{
- }
   
  .path-report-btecprogress table.dataTable {
   margin: 0 auto;
@@ -43,6 +39,10 @@
     padding-left:2px;
     padding-right:2px;
 }
+.path-report-btecprogress table.dataTable.th{
+        background-image: linear-gradient(white,red);
+        background-color:red;
+ }
 
  .path-report-btecprogress .keylabel{
         background-image: linear-gradient(white,lightgray);
@@ -192,12 +192,10 @@
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button:hover {
-	background-color: #ccc;
 	text-decoration: none !important;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_active {
-	background-color: #99B3FF;
 }
 
 
@@ -232,14 +230,8 @@
         float:left;
 }
 
-/*.path-report-btecprogress table.dataTable thead th {
-	//padding: 3px 18px 3px 10px;
-	//border-bottom: 3px solid black;
-        
-	font-weight: bold;
-	cursor: pointer;
-	*cursor: hand;
-}*/
+
+
 
 .path-report-btecprogress table.dataTable tfoot th {
 	/*padding: 3px 18px 3px 10px;*/
@@ -379,9 +371,6 @@
 	text-decoration: none !important;
 }
 
-.path-report-btecprogress .paging_full_numbers a.paginate_active {
-	background-color: #99B3FF;
-}
 
 
 /*
@@ -520,6 +509,7 @@
 
 .path-report-btecprogress table.grades tr.even td, .path-report-btecprogress table.dataTable tr.even {
 	background: #E4E4E4 !important;
+
 }
 .path-report-btecprogress table.grades tr.odd td, .path-report-btecprogress table.dataTable tr.odd {
 	background: white;
@@ -542,9 +532,6 @@
     background-color:red;
 }
 
-.path-report-btecprogress table.dataTable tr td.sorting_1.achieved { background-color: lightgreen; }
-.path-report-btecprogress table.dataTable tr td.sorting_1.notmet { background-color:#FF3300; }
-.path-report-btecprogress table.dataTable tr td.sorting_1.refer { background-color:#FF3300; }
 
 
 .path-report-btecprogress .achieved{
@@ -561,30 +548,25 @@
     background-image: linear-gradient(white, lightblue);
 }
 .path-report-btecprogress .notmet{
-    background-color: #FF3300;
+    background-color:  #FF3300;
 }
 
-.path-report-btecprogress  .referred{
+.path-report-btecprogress  .refer{
     background-image: linear-gradient(white, red);
-}
-.path-report-btecprogress .refer{
-    background-color: #FF3300;
 }
 
 .path-report-btecprogress .criteria{
     padding:0px 3px 0px 3px;
 }
 
-.path-report-btecprogress table.dataTable tr td.sorting_1.pass { background-color:orange; }
+.path-report-btecprogress table.dataTable tr td.sorting_1.pass { background-color:black; }
 
-.path-report-btecprogress .pass{
-    background-color:orange;    
-}
+
 .path-report-btecprogress .merit{
-    background-color:yellow;
+        background-image: linear-gradient(white,yellow);
 }
 .path-report-btecprogress .distinction{
-    background-color:green;    
+        background-image: linear-gradient(white,green);
 }
 
 .path-report-btecprogress table.dataTable thead th {
@@ -593,7 +575,14 @@
 	border: 1px solid black;
         border-top:1px solid black;
 	font-weight: bold;
-	cursor: pointer;
+        cursor: pointer;
 	*cursor: hand;
-        background-image: linear-gradient(white,lightgray);
+        background-image: linear-gradient(white,red);
+}
+.path-report-btecprogress table.dataTable sorting{
+    background-color: brown;
+}
+
+.path-report-btecprogress .pass{    
+   background-image:linear-gradient(white, orange); 
 }

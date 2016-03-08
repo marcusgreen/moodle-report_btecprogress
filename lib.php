@@ -399,7 +399,6 @@ and gd.method='btec'";
      $key .="<div class='nosubmission key'>".get_string('nosubmission','report_btecprogress')."</div>";
      $key.="<div class='newsubmission key '>".get_string('newsubmission','report_btecprogress')."</div>";
      $key.="<div class='achieved key '>".get_string('achieved','report_btecprogress')."</div>";
-     $key.="<div class='referred key '>".get_string('referred','report_btecprogress')."</div>";
 
      return $key;
      

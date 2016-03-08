@@ -16,6 +16,7 @@
 
  .path-report-btecprogress .keycontainer{
    margin-bottom:6px;   
+   margin-top:5px;
    -webkit-border-radius: 1px;   -moz-border-radius: 1px;
    border-radius: 2px; 
    border:solid black thin;
@@ -504,6 +505,7 @@
 
 .path-report-btecprogress table th {
         background-color: white;
+
 }
 
 .path-report-btecprogress table.grades td:first-child {

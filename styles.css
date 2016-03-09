@@ -1,38 +1,38 @@
 
 
- /*
- * Table
- */
-  
- .path-report-btecprogress table.dataTable {
-  margin: 0 auto;
-  width: 200%;
-  max-width:200%;
-  clear: both;
-  border-collapse: collapse;
-  table-layout: fixed; // ***********add this
-  word-wrap:break-word; // ***********and this
- }
+/*
+* Table
+*/
 
- .path-report-btecprogress .keycontainer{
-   margin-bottom:6px;   
-   margin-top:5px;
-   -webkit-border-radius: 1px;   -moz-border-radius: 1px;
-   border-radius: 2px; 
-   border:solid black thin;
-   display:inline-block;
-   box-shadow: 1px 1px 1px 1px #000;   
+.path-report-btecprogress table.dataTable {
+    margin: 0 auto;
+    width: 200%;
+    max-width:200%;
+    clear: both;
+    border-collapse: collapse;
+    table-layout: fixed; // ***********add this
+    word-wrap:break-word; // ***********and this
+}
+
+.path-report-btecprogress .keycontainer{
+    margin-bottom:6px;   
+    margin-top:5px;
+    -webkit-border-radius: 1px;   -moz-border-radius: 1px;
+    border-radius: 2px; 
+    border:solid black thin;
+    display:inline-block;
+    box-shadow: 1px 1px 1px 1px #000;   
 }
 .path-report-btecprogress .coursename{
-   background-image: linear-gradient(white,lightgray);
-   margin-bottom:6px;   
-   -webkit-border-radius: 1px;   -moz-border-radius: 1px;
-   border-radius: 2px; 
-   border:solid black thin;
-   display:inline-block;
-   box-shadow: 1px 1px 1px 1px #000;  
-   padding-left:2px;
-   padding-right:2px;
+    background-image: linear-gradient(white,lightgray);
+    margin-bottom:6px;   
+    -webkit-border-radius: 1px;   -moz-border-radius: 1px;
+    border-radius: 2px; 
+    border:solid black thin;
+    display:inline-block;
+    box-shadow: 1px 1px 1px 1px #000;  
+    padding-left:2px;
+    padding-right:2px;
 }
 
 .path-report-btecprogress .key{
@@ -41,13 +41,13 @@
     padding-right:2px;
 }
 .path-report-btecprogress table.dataTable.th{
-        background-image: linear-gradient(white,red);
-        background-color:red;
- }
+    background-image: linear-gradient(white,red);
+    background-color:red;
+}
 
- .path-report-btecprogress .keylabel{
-        background-image: linear-gradient(white,lightgray);
- }
+.path-report-btecprogress .keylabel{
+    background-image: linear-gradient(white,lightgray);
+}
 
 
 
@@ -55,39 +55,39 @@
 .path-report-btecprogress table.firstname {
     background-color:red;
     width:10px;
-    
+
 }
 
 
 
 .path-report-btecprogress table.dataTable tfoot th {
-	/*padding: 3px 18px 3px 10px;*/
-	border: 0px solid black;
-	font-weight: bold;
+    /*padding: 3px 18px 3px 10px;*/
+    border: 0px solid black;
+    font-weight: bold;
 
 }
 
 .path-report-btecprogress table.dataTable td {
-	padding: 3px 10px;
-        border:solid black 1px;
+    padding: 3px 10px;
+    border:solid black 1px;
 }
 
 .path-report-btecprogress table.dataTable td.center,
 .path-report-btecprogress table.dataTable td.dataTables_empty {
-	text-align: left;
+    text-align: left;
 }
 
 .path-report-btecprogress table.dataTable img.smallicon {
-	height: 12px; 
-	width: 12px;
+    height: 12px; 
+    width: 12px;
 }
 /*
  * Table wrapper
  */
 .path-report-btecprogress .dataTables_wrapper {
-	position: relative;
-	clear: both;
-	*zoom: 1;
+    position: relative;
+    clear: both;
+    *zoom: 1;
 }
 
 
@@ -95,7 +95,7 @@
  * Page length menu
  */
 .path-report-btecprogress .dataTables_length {
-	float: left;
+    float: left;
 }
 
 
@@ -103,8 +103,8 @@
  * Filter
  */
 .path-report-btecprogress .dataTables_filter {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
 }
 
 
@@ -112,8 +112,8 @@
  * Table information
  */
 .path-report-btecprogress .dataTables_info {
-	clear: both;
-	float: left;
+    clear: both;
+    float: left;
 }
 
 
@@ -121,8 +121,8 @@
  * Pagination
  */
 .path-report-btecprogress .dataTables_paginate {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
 }
 
 /* Two button pagination - previous / next */
@@ -130,70 +130,70 @@
 .path-report-btecprogress .paginate_enabled_previous,
 .path-report-btecprogress .paginate_disabled_next,
 .path-report-btecprogress .paginate_enabled_next {
-	height: 19px;
-	float: left;
-	cursor: pointer;
-	*cursor: hand;
-	color: #111 !important;
+    height: 19px;
+    float: left;
+    cursor: pointer;
+    *cursor: hand;
+    color: #111 !important;
 }
 .path-report-btecprogress .paginate_disabled_previous:hover,
 .path-report-btecprogress .paginate_enabled_previous:hover,
 .path-report-btecprogress .paginate_disabled_next:hover,
 .path-report-btecprogress .paginate_enabled_next:hover {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 .path-report-btecprogress .paginate_disabled_previous:active,
 .path-report-btecprogress .paginate_enabled_previous:active,
 .path-report-btecprogress .paginate_disabled_next:active,
 .path-report-btecprogress .paginate_enabled_next:active {
-	outline: none;
+    outline: none;
 }
 
 .path-report-btecprogress .paginate_disabled_previous,
 .path-report-btecprogress .paginate_disabled_next {
-	color: #666 !important;
+    color: #666 !important;
 }
 .path-report-btecprogress .paginate_disabled_previous,
 .path-report-btecprogress .paginate_enabled_previous {
-	padding-left: 23px;
+    padding-left: 23px;
 }
 .path-report-btecprogress .paginate_disabled_next,
 .path-report-btecprogress .paginate_enabled_next {
-	padding-right: 23px;
-	margin-left: 10px;
+    padding-right: 23px;
+    margin-left: 10px;
 }
 
 /* Full number pagination */
 .path-report-btecprogress .paging_full_numbers {
-	height: 22px;
-	line-height: 22px;
+    height: 22px;
+    line-height: 22px;
 }
 .path-report-btecprogress .paging_full_numbers a:active {
-	outline: none
+    outline: none
 }
 .path-report-btecprogress .paging_full_numbers a:hover {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button,
 .path-report-btecprogress .paging_full_numbers a.paginate_active {
-	border: 1px solid #aaa;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 2px 5px;
-	margin: 0 3px;
-	cursor: pointer;
-	*cursor: hand;
-	color: #333 !important;
+    border: 1px solid #aaa;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+    cursor: pointer;
+    *cursor: hand;
+    color: #333 !important;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button {
-	background-color: #ddd;
+    background-color: #ddd;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button:hover {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_active {
@@ -204,19 +204,19 @@
  * Processing indicator
  */
 .path-report-btecprogress .dataTables_processing {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 250px;
-	height: 30px;
-	margin-left: -125px;
-	margin-top: -15px;
-	padding: 14px 0 2px 0;
-	border: 1px solid #ddd;
-	text-align: left;
-	color: #999;
-	font-size: 14px;
-	background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 30px;
+    margin-left: -125px;
+    margin-top: -15px;
+    padding: 14px 0 2px 0;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: #999;
+    font-size: 14px;
+    background-color: white;
 }
 
 
@@ -224,34 +224,34 @@
 /*
  * Table
  */
- 
+
 .path-report-btecprogress table.dataTable {
-	margin: 0 auto;
-	clear: both;
-        float:left;
+    margin: 0 auto;
+    clear: both;
+    float:left;
 }
 
 
 
 
 .path-report-btecprogress table.dataTable tfoot th {
-	/*padding: 3px 18px 3px 10px;*/
-	border-top: 1px solid black;
-	font-weight: bold;
+    /*padding: 3px 18px 3px 10px;*/
+    border-top: 1px solid black;
+    font-weight: bold;
 }
 
 .path-report-btecprogress table.dataTable td {
-	padding: 3px 10px;
+    padding: 3px 10px;
 }
 
 .path-report-btecprogress table.dataTable td.center,
 .path-report-btecprogress table.dataTable td.dataTables_empty {
-	text-align: left;
+    text-align: left;
 }
 
 .path-report-btecprogress table.dataTable img.smallicon {
-	height: 12px; 
-	width: 12px;
+    height: 12px; 
+    width: 12px;
 }
 
 
@@ -260,9 +260,9 @@
  * Table wrapper
  */
 .path-report-btecprogress .dataTables_wrapper {
-	position: relative;
-	clear: both;
-	*zoom: 1;
+    position: relative;
+    clear: both;
+    *zoom: 1;
 }
 
 
@@ -270,7 +270,7 @@
  * Page length menu
  */
 .path-report-btecprogress .dataTables_length {
-	float: left;
+    float: left;
 }
 
 
@@ -278,8 +278,8 @@
  * Filter
  */
 .path-report-btecprogress .dataTables_filter {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
 }
 
 
@@ -287,8 +287,8 @@
  * Table information
  */
 .path-report-btecprogress .dataTables_info {
-	clear: both;
-	float: left;
+    clear: both;
+    float: left;
 }
 
 
@@ -296,8 +296,8 @@
  * Pagination
  */
 .path-report-btecprogress .dataTables_paginate {
-	float: right;
-	text-align: right;
+    float: right;
+    text-align: right;
 }
 
 /* Two button pagination - previous / next */
@@ -305,71 +305,71 @@
 .path-report-btecprogress .paginate_enabled_previous,
 .path-report-btecprogress .paginate_disabled_next,
 .path-report-btecprogress .paginate_enabled_next {
-	height: 19px;
-	float: left;
-	cursor: pointer;
-	*cursor: hand;
-	color: #111 !important;
+    height: 19px;
+    float: left;
+    cursor: pointer;
+    *cursor: hand;
+    color: #111 !important;
 }
 .path-report-btecprogress .paginate_disabled_previous:hover,
 .path-report-btecprogress .paginate_enabled_previous:hover,
 .path-report-btecprogress .paginate_disabled_next:hover,
 .path-report-btecprogress .paginate_enabled_next:hover {
-	text-decoration: none !important;
+    text-decoration: none !important;
 }
 .path-report-btecprogress .paginate_disabled_previous:active,
 .path-report-btecprogress .paginate_enabled_previous:active,
 .path-report-btecprogress .paginate_disabled_next:active,
 .path-report-btecprogress .paginate_enabled_next:active {
-	outline: none;
+    outline: none;
 }
 
 .path-report-btecprogress .paginate_disabled_previous,
 .path-report-btecprogress .paginate_disabled_next {
-	color: #666 !important;
+    color: #666 !important;
 }
 .path-report-btecprogress .paginate_disabled_previous,
 .path-report-btecprogress .paginate_enabled_previous {
-	padding-left: 23px;
+    padding-left: 23px;
 }
 .path-report-btecprogress .paginate_disabled_next,
 .path-report-btecprogress .paginate_enabled_next {
-	padding-right: 23px;
-	margin-left: 10px;
+    padding-right: 23px;
+    margin-left: 10px;
 }
 
 /* Full number pagination */
 .path-report-btecprogress .paging_full_numbers {
-	height: 22px;
-	line-height: 22px;
+    height: 22px;
+    line-height: 22px;
 }
 .path-report-btecprogress .paging_full_numbers a:active {
-	outline: none
+    outline: none
 }
 .path-report-btecprogress .paging_full_numbers a:hover {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button,
 .path-report-btecprogress .paging_full_numbers a.paginate_active {
-	bo1rder: 1px solid #aaa;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 2px 5px;
-	margin: 0 3px;
-	cursor: pointer;
-	*cursor: hand;
-	color: #333 !important;
+    border: 1px solid #aaa;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 2px 5px;
+    margin: 0 3px;
+    cursor: pointer;
+    *cursor: hand;
+    color: #333 !important;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button {
-	background-color: #ddd;
+    background-color: #ddd;
 }
 
 .path-report-btecprogress .paging_full_numbers a.paginate_button:hover {
-	background-color: #ccc;
-	text-decoration: none !important;
+    background-color: #ccc;
+    text-decoration: none !important;
 }
 
 
@@ -378,19 +378,19 @@
  * Processing indicator
  */
 .path-report-btecprogress .dataTables_processing {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 250px;
-	height: 30px;
-	margin-left: -125px;
-	margin-top: -15px;
-	padding: 14px 0 2px 0;
-	border: 1px solid #ddd;
-	text-align: left;
-	color: #999;
-	font-size: 14px;
-	background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250px;
+    height: 30px;
+    margin-left: -125px;
+    margin-top: -15px;
+    padding: 14px 0 2px 0;
+    border: 1px solid #ddd;
+    text-align: left;
+    color: #999;
+    font-size: 14px;
+    background-color: white;
 }
 
 
@@ -400,10 +400,10 @@
 .path-report-btecprogress .sorting { background-image:url("[[pix:moodle|t/sort]]") !important; background-position: center right !important; background-repeat: no-repeat !important; }
 .path-report-btecprogress .sorting_asc { background-image:url("[[pix:moodle|t/sort_asc]]") !important;background-position: center right !important; background-repeat: no-repeat !important; }
 .path-report-btecprogress .sorting_desc { background-image:url("[[pix:moodle|t/sort_desc]]") !important; background-position: center right !important; background-repeat: no-repeat !important; }
- 
+
 .path-report-btecprogress table.dataTable thead th:active,
 .path-report-btecprogress table.dataTable thead td:active {
-	outline: none;
+    outline: none;
 }
 
 
@@ -411,122 +411,122 @@
  * Scrolling
  */
 .path-report-btecprogress .dataTables_scroll {
-	clear: both;
+    clear: both;
 }
 
 .path-report-btecprogress .dataTables_scrollBody {
-	*margin-top: -1px;
-	-webkit-overflow-scrolling: touch;
+    *margin-top: -1px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .path-report-btecprogress table.grades {
-	color:#666;
-	font-size:12px;
-	background:#eaebec;
-	border:#ccc 1px solid;
+    color:#666;
+    font-size:12px;
+    background:#eaebec;
+    border:#ccc 1px solid;
 }
 /*
 .path-report-btecprogress table.grades th {
-	padding:8px 10px 8px 10px;
-	border-top:1px solid #fafafa;
-	//border-bottom:1px solid #e0e0e0;
+        padding:8px 10px 8px 10px;
+        border-top:1px solid #fafafa;
+        //border-bottom:1px solid #e0e0e0;
         background-image: linear-gradient(white,lightgray);
 
-	//background: #ededed;
+        //background: #ededed;
 }*/
 
 .path-report-btecprogress table.grades th:first-child {
-	text-align: left;
-	padding-left:10px;
-	/*width: 80%;*/
-	border-right: 1px solid #e0e0e0;
+    text-align: left;
+    padding-left:10px;
+    /*width: 80%;*/
+    border-right: 1px solid #e0e0e0;
 }
 
 .path-report-btecprogress table.grades tr {
-	text-align: left;
-	padding-left:10px;
-        border:solid 0px black;
+    text-align: left;
+    padding-left:10px;
+    border:solid 0px black;
 }
 .path-report-btecprogress table.grades td:first-child {
-	text-align: left;
-	padding-left:5px;
-	border-left: 0;
+    text-align: left;
+    padding-left:5px;
+    border-left: 0;
 }
 
 /*
 .path-report-btecprogress table.grades tr.even td, .path-report-btecprogress table.dataTable tr.even {
-	background: #f6f6f6 !important;
+        background: #f6f6f6 !important;
 }
 */
 .path-report-btecprogress table.grades tr:last-child td {
-	border-bottom:0;
+    border-bottom:0;
 }
 .path-report-btecprogress table.grades tr:hover td {
-	background: #f2f2f2 !important;
+    background: #f2f2f2 !important;
 }
 
 /*
  * Scrolling
  */
 .path-report-btecprogress .dataTables_scroll {
-	clear: both;
+    clear: both;
 }
 
 .path-report-btecprogress .dataTables_scrollBody {
-	*margin-top: -1px;
-	-webkit-overflow-scrolling: touch;
+    *margin-top: -1px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .path-report-btecprogress table.grades {
-	color:#666;
-	font-size:12px;
-	background:#eaebec;
-	border:#ccc 1px solid;
+    color:#666;
+    font-size:12px;
+    background:#eaebec;
+    border:#ccc 1px solid;
 }
 
 .path-report-btecprogress table.grades th {
-	padding:8px 10px 8px 10px;
-	border-top:0px solid #fafafa;
-	//border-bottom:0px solid #e0e0e0;
-	background: #ededed;
+    padding:8px 10px 8px 10px;
+    border-top:0px solid #fafafa;
+    //border-bottom:0px solid #e0e0e0;
+    background: #ededed;
 }
 
 .path-report-btecprogress table.grades th:first-child {
-	text-align: left;
-	padding-left:10px;
-	/*width: 80%;*/
-	border-right: 1px solid #e0e0e0;
+    text-align: left;
+    padding-left:10px;
+    /*width: 80%;*/
+    border-right: 1px solid #e0e0e0;
 }
 
 .path-report-btecprogress table.grades tr {
-	text-align: left;
-	padding-left:10px;
+    text-align: left;
+    padding-left:10px;
 }
 
 .path-report-btecprogress table th {
-        background-color: white;
+    background-color: white;
 
 }
 
 .path-report-btecprogress table.grades td:first-child {
-	text-align: left;
-	padding-left:5px;
-	border-left: 0;
+    text-align: left;
+    padding-left:5px;
+    border-left: 0;
 }
 
 .path-report-btecprogress table.grades tr.even td, .path-report-btecprogress table.dataTable tr.even {
-	background: #E4E4E4 !important;
+    background: #E4E4E4 !important;
 
 }
 .path-report-btecprogress table.grades tr.odd td, .path-report-btecprogress table.dataTable tr.odd {
-	background: white;
+    background: white;
 }
 
 .path-report-btecprogress table.grades tr:last-child td {
-	/*border-bottom:0;*/
+    /*border-bottom:0;*/
 }
 .path-report-btecprogress table.grades tr:hover td {
-	background: #f2f2f2 !important;
+    background: #f2f2f2 !important;
 }
 
 /* BTEC Progress */
@@ -570,26 +570,55 @@
 
 
 .path-report-btecprogress .merit{
-        background-image: linear-gradient(white,yellow);
+    background-image: linear-gradient(white,yellow);
 }
 .path-report-btecprogress .distinction{
-        background-image: linear-gradient(white,green);
+    background-image: linear-gradient(white,green);
 }
 
 .path-report-btecprogress table.dataTable thead th {
-	padding: 3px 18px 3px 10px;
-        padding: 0px 3px 0px 3px;
-	border: 1px solid black;
-        border-top:1px solid black;
-	font-weight: bold;
-        cursor: pointer;
-	*cursor: hand;
-        background-image: linear-gradient(white,red);
+    padding: 3px 18px 3px 10px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid black;
+    border-top:1px solid black;
+    font-weight: bold;
+    cursor: pointer;
+    *cursor: hand;
+    background-image: linear-gradient(white,red);
 }
 .path-report-btecprogress table.dataTable sorting{
     background-color: brown;
 }
 
 .path-report-btecprogress .pass{    
-   background-image:linear-gradient(white, orange); 
+    background-image:linear-gradient(white, orange); 
+}
+
+.paging_full_numbers .ui-button{
+    margin-top:3px;
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    margin-right: 0.333em;
+    padding: 0.5em 1em;
+    border: 1px solid #999;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 0.88em;
+    color: black;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #e9e9e9;
+    background-image: -webkit-linear-gradient(top, white 0%, #e9e9e9 100%);
+    background-image: -moz-linear-gradient(top, white 0%, #e9e9e9 100%);
+    background-image: -ms-linear-gradient(top, white 0%, #e9e9e9 100%);
+    background-image: -o-linear-gradient(top, white 0%, #e9e9e9 100%);
+    background-image: linear-gradient(top, white 0%, #e9e9e9 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='white', EndColorStr='#e9e9e9');
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-decoration: none;
+    outline: none;
 }
